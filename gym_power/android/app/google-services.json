@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "824542534065",
+    "firebase_url": "https://gym-power-48b36.firebaseio.com",
+    "project_id": "gym-power-48b36",
+    "storage_bucket": "gym-power-48b36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824542534065:android:f0bac50a0a5ffb00420590",
+        "android_client_info": {
+          "package_name": "com.gym_power"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824542534065-iht3jf10c9g3472k3celjuvgle93dipo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjFTHZdWiEOOFyTrosjJJ5t4tr1v2krgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824542534065-iht3jf10c9g3472k3celjuvgle93dipo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
