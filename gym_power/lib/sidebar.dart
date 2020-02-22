@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/auth.dart';
+import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
 
 
@@ -47,9 +48,8 @@ class SideBar extends StatelessWidget {
 
             //class map
             InkWell(
-              enableFeedback: true,
               onTap: (){
-               // Navigator.of(context).pushNamed(TabClass.tag);
+                //Navigator.of(context).pushNamed(Settings.tag);
               },
               child: ListTile(
                 leading: Icon(FontAwesomeIcons.users, color: Colors.black, size: 32.0,),
@@ -83,7 +83,12 @@ class SideBar extends StatelessWidget {
             //Settings
             InkWell(
               onTap: (){
-                //Navigator.of(context).pushNamed(Settings.tag);
+                showModalBottomSheet(context: context, builder: (context){
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+                    child: Settings(),
+                  );
+                });
               },
               child: ListTile(
                 leading: Icon(Icons.settings, color: Colors.black,size: 35.0,),

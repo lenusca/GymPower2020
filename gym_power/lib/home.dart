@@ -25,33 +25,40 @@ class HomeState extends State<Home> {
     return loading ? Loading() : StreamBuilder<UserData>(
         stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot){
-          UserData userData = snapshot.data;
-
-          return  Container(
-            child: Scaffold(
-              drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio,),
-              backgroundColor: Colors.brown[50],
-              appBar: AppBar(
-                title: Text(userData.nome),
-                backgroundColor: Colors.brown[400],
-                elevation: 0.0,
-                actions: <Widget>[
-                  FlatButton.icon(
-                    icon: Icon(Icons.person),
-                    label: Text('logout'),
-                    onPressed: () async {
-                      await _auth.signOut();
-                      setState(() {
-                        loading = true;
-                      });
-                      Navigator.of(context).pushReplacementNamed(SignIn.tag);
-                    },
-                  ),
-                ],
-              ),
+          if(snapshot.hasData){
+            UserData userData = snapshot.data;
+            return  Container(
+              child: Scaffold(
+                drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio,),
+                backgroundColor: Colors.brown[50],
+                appBar: AppBar(
+                  title: Text(userData.nome),
+                  backgroundColor: Colors.brown[400],
+                  elevation: 0.0,
+                  actions: <Widget>[
+                    FlatButton.icon(
+                      icon: Icon(Icons.person),
+                      label: Text('logout'),
+                      onPressed: () async {
+                        await _auth.signOut();
+                        setState(() {
+                          loading = true;
+                        });
+                        Navigator.of(context).pushReplacementNamed(SignIn.tag);
+                      },
+                    ),
+                  ],
+                ),
 
               ),
             );
+          }
+
+          else{
+            return Loading();
+          }
+
+
 
 
         }

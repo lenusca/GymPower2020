@@ -126,7 +126,7 @@ class SignInState extends State<SignIn>{
           content: TextField(
             controller: customController,
             onChanged: (val){
-              print(val);
+
               setState(() => mail = val);
             },
           ),

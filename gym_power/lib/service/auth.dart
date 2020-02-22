@@ -35,6 +35,7 @@ class AuthService {
     try {
       // ligação a firebase, como quer fazer o sign in
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+
       // guardar na base de dados
       FirebaseUser user = result.user;
       return _userFromFirebaseUser(user);
