@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_power/home.dart';
+import 'package:gym_power/loading.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/signup.dart';
 
@@ -13,6 +14,7 @@ class SignIn extends StatefulWidget {
 class SignInState extends State<SignIn>{
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>(); //usada para validação
+  bool loading = false;
   String mail = '';
   String pass = '';
   String error = '';
@@ -83,14 +85,14 @@ class SignInState extends State<SignIn>{
           onPressed: () async{
             // currentstate vai buscar os valores dentro da form
             //validate vai validar, retorna true ou false
-            print(pass);
-            print(mail);
             if(_formKey.currentState.validate()){
+              setState(() => loading = true);
               dynamic result = await _auth.signInWithEmailAndPassword(mail, pass);
               // vai buscar o utilizador
               if(result == null) {
                 setState(() {
                   error = 'User not valid! ';
+                  loading = false;
                 });
               }
               else{
@@ -104,7 +106,7 @@ class SignInState extends State<SignIn>{
         )
     );
 
-    // esquecer a pass
+    // criar conta
     final createaccountLabel = FlatButton(
       child: Text(
           'Create Account',
@@ -116,10 +118,50 @@ class SignInState extends State<SignIn>{
       },
     );
 
+    createAlertDialog(BuildContext context) {
+      TextEditingController customController = new TextEditingController();
+      return showDialog(context: context, builder: (context) {
+        return AlertDialog(
+          title: Text('Email: '),
+          content: TextField(
+            controller: customController,
+            onChanged: (val){
+              print(val);
+              setState(() => mail = val);
+            },
+          ),
+          actions: <Widget>[
+            MaterialButton(
+              elevation: 5.0,
+              child: Text('SEND', style: TextStyle(color: Colors.deepOrange)),
+              //sair do popup
+              onPressed: () {
+                _auth.sendPasswordResetEmail(mail);
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+          ],
+        );
+      });
+    }
+
+    // esquecer a pass
+    final forgotLabel = FlatButton(
+      child: Text(
+          'Forgot password?',
+          style: TextStyle(color: Colors.grey),
+          textAlign: TextAlign.center
+      ),
+      onPressed:(){
+        createAlertDialog(context);
+      },
+    );
+
     // pop up para o forgot password
 
     //fundo
-    return Scaffold(
+    // se o loading for true fica a pensar, se não mostra tudo
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: Form(
@@ -139,6 +181,7 @@ class SignInState extends State<SignIn>{
                 error,
                 style: TextStyle(color: Colors.red, fontSize: 14.0),
               ),
+              forgotLabel,
               loginButton,
               createaccountLabel,
             ],

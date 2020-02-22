@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_power/loading.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/home.dart';
 import 'package:gym_power/signin.dart';
@@ -12,6 +13,7 @@ class SignUp extends StatefulWidget{
 class SignUpState extends State<SignUp>{
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>(); //usada para validação
+  bool loading = false;
   String error = '';
   String mail = '';
   String pass = '';
@@ -122,15 +124,20 @@ class SignUpState extends State<SignUp>{
             // vai buscar o utilizador
             //print(mail);
             //print(pass);
+            setState(() {
+              loading = true;
+            });
             dynamic result = await _auth.registerWithEmailAndPassword(mail, pass);
             if(result == null) {
               setState(() {
+                loading = false;
                 error = 'Please supply a valid email';
               });
             }
             else{
               Navigator.of(context).pushNamed(Home.tag);
             }
+
           }
         },
         padding: EdgeInsets.all(12),
@@ -154,7 +161,7 @@ class SignUpState extends State<SignUp>{
 
 
     //fundo
-    return Scaffold(
+    return  loading ? Loading() : Scaffold(
 
       backgroundColor: Colors.white,
 

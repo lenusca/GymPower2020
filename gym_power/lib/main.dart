@@ -24,7 +24,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Gym Power",
-        theme: ThemeData(primarySwatch: Colors.grey,),
+        theme: ThemeData(
+        ),
+        darkTheme: ThemeData.dark(),
         home: SignIn(),
         routes: routes,
       ),

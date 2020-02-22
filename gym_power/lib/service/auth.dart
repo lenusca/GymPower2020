@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gym_power/models/user.dart';
+import 'package:gym_power/service/database.dart';
 
 class AuthService {
 
@@ -50,6 +51,10 @@ class AuthService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // guardar na base de dados
       FirebaseUser user = result.user;
+
+      // criar novo documento para o utilzador com aquele uid
+      await DatabaseService(uid: user.uid).updateUserData(0, null, "Teste1", email, "F", password, 963853790, null);
+
       return _userFromFirebaseUser(user);
     } catch (error) {
       print(error.toString());
@@ -62,6 +67,17 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+  // esqquecer da password
+  @override
+  Future sendPasswordResetEmail(String email) async{
+    try{
+      return await _auth.sendPasswordResetEmail(email: email);
+    } catch(error){
       print(error.toString());
       return null;
     }
