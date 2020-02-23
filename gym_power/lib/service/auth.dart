@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/database.dart';
 
 class AuthService {
-
+  int count = 0;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // create user obj based on firebase user
@@ -54,8 +55,7 @@ class AuthService {
       FirebaseUser user = result.user;
 
       // criar novo documento para o utilzador com aquele uid
-      await DatabaseService(uid: user.uid).updateUserData(0, null, "Teste1", email, "F", password, 963853790, null);
-
+      await DatabaseService(uid: user.uid).updateUserData(count+1, "User_icon_BLACK-01.png", "Teste1", email, "F", password, 963853790, DateTime.now());
       return _userFromFirebaseUser(user);
     } catch (error) {
       print(error.toString());

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class User{
@@ -8,7 +10,7 @@ class User{
 class UserData {
   final String uid;
   final int numSocio, telemovel;
-  final Image img;
+  final String img;
   final DateTime dtNasci;
   final String nome, email, sexo, pass;
 

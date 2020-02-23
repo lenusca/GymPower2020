@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gym_power/models/user.dart';
@@ -9,23 +10,24 @@ import 'package:gym_power/signin.dart';
 class SideBar extends StatelessWidget {
   final String nome;
   final int numSocio;
+  final String img;
   final AuthService _auth = AuthService();
 
-
-  SideBar({this.nome, this.numSocio});
+  SideBar({this.nome, this.numSocio, this.img});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
     return Drawer(
         child: ListView(
 
           children: <Widget>[
             //nome e imagem do utilizador
             UserAccountsDrawerHeader(
+
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage('http://i.pravatar.cc/300'),
+                backgroundImage: NetworkImage(img),
+                backgroundColor: Colors.transparent,
                 radius: 400.0,
               ),
               accountName: new Text(nome, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
@@ -83,13 +85,9 @@ class SideBar extends StatelessWidget {
             //Settings
             InkWell(
               onTap: (){
-                showModalBottomSheet(context: context, builder: (context){
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-                    child: Settings(),
-                  );
-                });
+                Navigator.of(context).pushNamed(Settings.tag);
               },
+
               child: ListTile(
                 leading: Icon(Icons.settings, color: Colors.black,size: 35.0,),
                 title: Text("Settings", style: new TextStyle(fontSize: 20.0)),

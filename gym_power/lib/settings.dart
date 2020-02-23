@@ -1,9 +1,16 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_power/home.dart';
+import 'package:path/path.dart' as Path;
 import 'package:gym_power/loading.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/database.dart';
+import 'package:gym_power/sidebar.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+
 
 
 class Settings extends StatefulWidget{
@@ -16,79 +23,171 @@ class Settings extends StatefulWidget{
 class SettingsState extends State<Settings> {
   //saber o que foi inserido
   final _formKey = GlobalKey<FormState>();
-  String _currentName, _currentPassword, _currentSexo;
+  File _img;
+  String filename;
+  String _currentName, _currentPassword, _currentSexo, _currentImg;
   int _currentTelemovel;
   DateTime _currentDtNasci;
   final List<String> sexoList = ['F', 'M', 'Undetermined'];
   @override
   Widget build(BuildContext context) {
+
+    Future uploadImage() async{
+      StorageReference ref = FirebaseStorage.instance.ref().child(filename);
+      StorageUploadTask upload = ref.putFile(_img);
+      StorageTaskSnapshot taskSnapshot = await upload.onComplete;
+      setState(() {
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text("Profile Picture Uploaded")));
+      });
+    };
+
+    Future getImage() async{
+      var image = await ImagePicker.pickImage(source: ImageSource.gallery).then((image){
+        setState(() {
+          _img = image;
+          filename=Path.basename(_img.path);
+        });
+      });
+      uploadImage();
+    };
+
     User user = Provider.of<User>(context);
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
         if(snapshot.hasData){
           UserData userData = snapshot.data;
-          return Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                Text("Account Settings", style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 18.0),),
-                SizedBox(height: 20.0,),
-                // update do nome
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Name'),
-                  initialValue: userData.nome,
-                  validator: (val) => val.isEmpty ? 'Please enter a name' : null,
-                  onChanged: (val) => setState(() => _currentName = val),
-                ),
-                SizedBox(height: 10.0,),
-                DropdownButtonFormField(
-                  decoration: InputDecoration(labelText: 'Gender'),
-                  value: _currentSexo ?? userData.sexo,
-                  items: sexoList.map((sexo){
-                    return DropdownMenuItem(
-                        value: sexo,
-                        child: Text('$sexo sexoList')
-                    );
-                  }).toList(),
-                  onChanged: (val) => setState(() => _currentSexo = val),
-                ),
-                SizedBox(height: 10.0,),
-
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Phone Number'),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                  initialValue: userData.telemovel.toString(),
-                  // passar para inteiro
-                  onChanged: (val) => setState(() => _currentTelemovel = num.tryParse(val)),
-
-                ),
-
-                RaisedButton(
-                  color: Colors.deepOrangeAccent,
-                  child: Text('Save'),
-                  onPressed: () async {
-                    if(_formKey.currentState.validate()){
-                      await DatabaseService(uid: user.uid).updateUserData(
-                          snapshot.data.numSocio,
-                          snapshot.data.img,
-                          _currentName ?? snapshot.data.nome,
-                          snapshot.data.email,
-                          _currentSexo ?? snapshot.data.sexo,
-                          snapshot.data.pass,
-                          _currentTelemovel ?? snapshot.data.telemovel,
-                          snapshot.data.dtNasci
-                      );
-                      Navigator.pop(context);
+          print(userData.dtNasci);
+          return Container(
+            child: Scaffold(
+              drawer: SideBar(),
+              appBar: AppBar(
+                title: Text("Account Settings", style: TextStyle(color: Colors.white)),
+                backgroundColor: Colors.deepOrangeAccent[200],
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.home),
+                    color: Colors.white,
+                    onPressed:(){
+                      Navigator.of(context).pushNamed(Home.tag);
                     }
-                  },
-                ),
+                  )
+                ],
+              ),
+              body: Center(
+                child: ListView(
+                  padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                  children: <Widget>[
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(height: 30.0,),
+                          // update imag
+                          Align(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              child: ClipOval(
+                                child: SizedBox(
+                                  width: 180.0,
+                                  height: 180.0,
+                                  child: (_img != null) ? Image.file(_img, fit: BoxFit.fill,) : Image.network(userData.img, fit: BoxFit.fill,),
+                                ),
+                              ),
+
+                              radius: 80.0,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.camera_alt),
+                            color: Colors.grey,
+                            iconSize: 30.0,
+                            onPressed: (){
+                              getImage();
+                            },
+                          ),
+
+                          SizedBox(height:10.0),
+                          // update do nome
+                          TextFormField(
+                            decoration: InputDecoration(labelText: 'Name'),
+                            initialValue: userData.nome,
+                            validator: (val) => val.isEmpty ? 'Please enter a name' : null,
+                            onChanged: (val) => setState(() => _currentName = val),
+                          ),
+                          SizedBox(height: 10.0,),
+                          DropdownButtonFormField(
+                            decoration: InputDecoration(labelText: 'Gender'),
+                            value: _currentSexo ?? userData.sexo,
+                            items: sexoList.map((sexo){
+                              return DropdownMenuItem(
+                                  value: sexo,
+                                  child: Text('$sexo')
+                              );
+                            }).toList(),
+                            onChanged: (val) => setState(() => _currentSexo = val),
+                          ),
+                          SizedBox(height: 10.0,),
+
+                          TextFormField(
+                            decoration: InputDecoration(labelText: 'Phone Number'),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                            initialValue: userData.telemovel.toString(),
+                            // passar para inteiro
+                            onChanged: (val) => setState(() => _currentTelemovel = num.tryParse(val)),
+
+                          ),
+                          SizedBox(height: 10.0,),
+
+                          FlatButton.icon(
+                            icon: Icon(Icons.calendar_today, color: Colors.grey,),
+                            label: Text('Birth', style: TextStyle(color: Colors.grey)),
+                            onPressed: () {
+                              showDatePicker(
+                                  context: context,
+                                  initialDate: userData.dtNasci,
+                                  firstDate: DateTime(1920),
+                                  lastDate: DateTime(2021),
+
+                              ).then((val){
+                                setState(() {
+                                  _currentDtNasci = val;
+                                });
+                              });
+                            },
+                          ),
 
 
-              ],
+                          RaisedButton(
+                            color: Colors.deepOrangeAccent,
+                            child: Text('Save', style: TextStyle(color: Colors.white),),
+                            onPressed: () async {
+                              if(_formKey.currentState.validate()){
+                                await DatabaseService(uid: user.uid).updateUserData(
+                                    snapshot.data.numSocio,
+                                    filename ?? snapshot.data.img,
+                                    _currentName ?? snapshot.data.nome,
+                                    snapshot.data.email,
+                                    _currentSexo ?? snapshot.data.sexo,
+                                    snapshot.data.pass,
+                                    _currentTelemovel ?? snapshot.data.telemovel,
+                                    _currentDtNasci ?? snapshot.data.dtNasci
+                                );
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
             ),
+
           );
+
         }
         else {
           return Loading();

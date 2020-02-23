@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gym_power/loading.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/home.dart';
+import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
 
 class SignUp extends StatefulWidget{
@@ -135,7 +136,7 @@ class SignUpState extends State<SignUp>{
               });
             }
             else{
-              Navigator.of(context).pushNamed(Home.tag);
+              Navigator.of(context).pushNamed(Settings.tag);
             }
 
           }

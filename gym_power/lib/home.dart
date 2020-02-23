@@ -29,7 +29,7 @@ class HomeState extends State<Home> {
             UserData userData = snapshot.data;
             return  Container(
               child: Scaffold(
-                drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio,),
+                drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
                 backgroundColor: Colors.brown[50],
                 appBar: AppBar(
                   title: Text(userData.nome),
