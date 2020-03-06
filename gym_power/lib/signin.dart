@@ -101,7 +101,7 @@ class SignInState extends State<SignIn>{
             }
           },
           padding: EdgeInsets.all(12),
-          color: Colors.deepOrange,
+          color: Colors.deepOrangeAccent[200],
           child: Text('Login', style: TextStyle(color: Colors.white)),
         )
     );
@@ -110,7 +110,7 @@ class SignInState extends State<SignIn>{
     final createaccountLabel = FlatButton(
       child: Text(
           'Create Account',
-          style: TextStyle(color: Colors.deepOrange),
+          style: TextStyle(color: Colors.deepOrangeAccent[200]),
           textAlign: TextAlign.center
       ),
       onPressed:(){

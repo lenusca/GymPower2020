@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_power/SignUp.dart';
+import 'package:gym_power/TabHealth.dart';
+import 'package:gym_power/healthTable.dart';
 import 'package:gym_power/home.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/settings.dart';
@@ -8,7 +10,11 @@ import 'package:provider/provider.dart';
 
 import 'models/user.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(
+    child:MyApp());
+    );
+
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -17,6 +23,7 @@ class MyApp extends StatelessWidget {
     SignUp.tag: (context) => SignUp(),
     Home.tag: (context) => Home(),
     Settings.tag: (context) => Settings(),
+    TabHealth.tag: (context) => TabHealth()
   };
 
   @override
@@ -26,7 +33,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Gym Power",
-        theme: ThemeData(),
+        theme: ThemeData(primaryColor: Colors.deepOrangeAccent),
         home: SignIn(),
         routes: routes,
       ),

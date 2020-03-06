@@ -57,12 +57,11 @@ class SettingsState extends State<Settings> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           UserData userData = snapshot.data;
-          print(userData.dtNasci);
           return Container(
             child: Scaffold(
-              drawer: SideBar(),
+              drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
               appBar: AppBar(
-                title: Text("Account Settings", style: TextStyle(color: Colors.white)),
+                title: Text("Account Settings", style: TextStyle(color: Colors.white, fontSize: 25)),
                 backgroundColor: Colors.deepOrangeAccent[200],
                 actions: <Widget>[
                   IconButton(
@@ -117,6 +116,7 @@ class SettingsState extends State<Settings> {
                             onChanged: (val) => setState(() => _currentName = val),
                           ),
                           SizedBox(height: 10.0,),
+
                           DropdownButtonFormField(
                             decoration: InputDecoration(labelText: 'Gender'),
                             value: _currentSexo ?? userData.sexo,
@@ -146,6 +146,7 @@ class SettingsState extends State<Settings> {
                             label: Text('Birth', style: TextStyle(color: Colors.grey)),
                             onPressed: () {
                               showDatePicker(
+
                                   context: context,
                                   initialDate: userData.dtNasci,
                                   firstDate: DateTime(1920),
@@ -161,7 +162,7 @@ class SettingsState extends State<Settings> {
 
 
                           RaisedButton(
-                            color: Colors.deepOrangeAccent,
+                            color: Colors.deepOrangeAccent[200],
                             child: Text('Save', style: TextStyle(color: Colors.white),),
                             onPressed: () async {
                               if(_formKey.currentState.validate()){

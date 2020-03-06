@@ -142,7 +142,7 @@ class SignUpState extends State<SignUp>{
           }
         },
         padding: EdgeInsets.all(12),
-        color: Colors.deepOrange,
+        color: Colors.deepOrangeAccent[200],
         child: Text('Create Account', style: TextStyle(color: Colors.white),),
       ),
     );

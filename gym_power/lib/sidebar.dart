@@ -32,7 +32,7 @@ class SideBar extends StatelessWidget {
               ),
               accountName: new Text(nome, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
               accountEmail: new Text("Member number: ${numSocio}", style: new TextStyle(fontSize: 17.0)),
-              decoration: new BoxDecoration(color: Colors.deepOrangeAccent[100]),
+              decoration: new BoxDecoration(color: Colors.deepOrange[300]),
             ),
 
             //opcoes do menu
