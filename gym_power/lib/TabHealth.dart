@@ -23,7 +23,6 @@ class TabHealthState extends State<TabHealth> {
         builder: (context, snapshot){
           if(snapshot.hasData){
           UserData userData = snapshot.data;
-          print(userData.dtNasci);
           return  DefaultTabController(
             length: 1, //
             child: Scaffold(
@@ -54,7 +53,7 @@ class TabHealthState extends State<TabHealth> {
               drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
               body: TabBarView(
                 children: [
-                  HealthTable(uid: userData.uid,), // Nome da função que queres que apareça
+                  HealthTable(), // Nome da função que queres que apareça
                   //WorkActivities(), // Nome da função que queres que apareça
                 ],
               ),

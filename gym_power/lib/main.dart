@@ -3,6 +3,7 @@ import 'package:gym_power/SignUp.dart';
 import 'package:gym_power/TabHealth.dart';
 import 'package:gym_power/healthTable.dart';
 import 'package:gym_power/home.dart';
+import 'package:gym_power/map.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
@@ -10,9 +11,7 @@ import 'package:provider/provider.dart';
 
 import 'models/user.dart';
 
-void main() => runApp(MultiProvider(
-    child:MyApp());
-    );
+void main() => runApp(MyApp());
 
 
 
@@ -23,7 +22,8 @@ class MyApp extends StatelessWidget {
     SignUp.tag: (context) => SignUp(),
     Home.tag: (context) => Home(),
     Settings.tag: (context) => Settings(),
-    TabHealth.tag: (context) => TabHealth()
+    TabHealth.tag: (context) => TabHealth(),
+    gpsMap.tag: (context) => gpsMap()
   };
 
   @override

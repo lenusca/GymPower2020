@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:gym_power/models/health.dart';
 import 'package:gym_power/models/user.dart';
 
@@ -62,20 +59,13 @@ class DatabaseService{
   }
   
   // dados sobre health
-  HealthData _healthDataFromSnapshot(DocumentSnapshot doc){
-    // vai buscar cada dado de saude de um utilizador
-    print(doc.data['gorduraVisceral']);
-    print(doc.data['IMC']);
-    return HealthData(
-        uid: uid,
-        altura: doc.data['altura'],
-        IMC: doc.data['IMC'],
-        gorduraVisceral: doc.data['gorduraVisceral'],
-        massaMuscular: doc.data['massaMuscular'],
-        nivelAgua: doc.data['nivelAgua'],
-        peso: doc.data['peso'],
-        data: doc.data['data'].toDate()
-    );
+  List<HealthData> _healthDataFromSnapshot(QuerySnapshot snapshot) {
+    print("AQUI2");
+    return snapshot.documents.map((doc){
+      print("AQUI");
+      print(doc.data['altura']);
+
+    }).toList();
   }
 
   // get user doc stream
@@ -84,12 +74,9 @@ class DatabaseService{
   }
 
   // get healt doc stream
-  Stream<HealthData> get healthData{
-    return health.document(uid).snapshots().map(_healthDataFromSnapshot);
-  }
-
-  getHealth(String uid){
-    return Firestore.instance.collection('planoSaude').where('userID', isEqualTo: uid).getDocuments();
+  Stream<List<HealthData>> get healthData{
+    print("AQUI");
+    return health.snapshots().map(_healthDataFromSnapshot);
   }
 
 }

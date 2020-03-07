@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gym_power/TabHealth.dart';
 import 'package:gym_power/healthTable.dart';
 import 'package:gym_power/loading.dart';
+import 'package:gym_power/map.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/service/database.dart';
@@ -207,7 +208,7 @@ class HomeState extends State<Home> {
                       color: Colors.deepOrangeAccent[200],
                       child: InkWell(
                         onTap: (){
-                          Navigator.of(context).pushNamed(Settings.tag);
+                          Navigator.of(context).pushNamed(gpsMap.tag);
                         },
                         splashColor: Colors.white,
                         child: Center(
@@ -215,7 +216,7 @@ class HomeState extends State<Home> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(FontAwesomeIcons.mapMarkerAlt, size: 60.0, ),
-                              Text("Localization", style: new TextStyle(fontSize: 17.0, color: Colors.white))
+                              Text("Location", style: new TextStyle(fontSize: 17.0, color: Colors.white))
                             ],
                           ),
                         ),

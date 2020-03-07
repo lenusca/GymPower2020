@@ -1,10 +1,13 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gym_power/map.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
+
+import 'TabHealth.dart';
 
 
 class SideBar extends StatelessWidget {
@@ -62,8 +65,7 @@ class SideBar extends StatelessWidget {
             //Health
             InkWell(
               onTap: (){
-
-               // Navigator.of(context).pushNamed(Health.tag);
+               Navigator.of(context).pushNamed(TabHealth.tag);
               },
               child: ListTile(
                 leading: Icon(FontAwesomeIcons.heartbeat, color: Colors.black, size: 35.0,),
@@ -97,7 +99,7 @@ class SideBar extends StatelessWidget {
             //GPS
             InkWell(
               onTap: (){
-                //Navigator.of(context).pushNamed(Settings.tag);
+                Navigator.of(context).pushNamed(gpsMap.tag);
               },
               child: ListTile(
                 leading: Icon(FontAwesomeIcons.mapMarkerAlt, color: Colors.black,size: 35.0,),
