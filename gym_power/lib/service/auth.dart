@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/database.dart';
 
 class AuthService {
   int count = 0;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FacebookLogin _facebookLogin = FacebookLogin();
 
   // create user obj based on firebase user
   User _userFromFirebaseUser(FirebaseUser user) {
@@ -71,6 +73,37 @@ class AuthService {
 
   }
 
+  //sign in with Facebook
+  Future signInWithFacebook() async{
+    try {
+      //ligação com a base dados, forma de fazer login
+      FacebookLogin facebookLogin = FacebookLogin();
+      FacebookLoginResult facebookLoginResult = await facebookLogin.logIn(['email']);
+      switch(facebookLoginResult.status){
+        case FacebookLoginStatus.cancelledByUser:
+          print("CANCELLED");
+          break;
+        case FacebookLoginStatus.loggedIn:
+          print("LOGGED IN");
+          AuthCredential credential = FacebookAuthProvider.getCredential(accessToken: facebookLoginResult.accessToken.token);
+          AuthResult result = await _auth.signInWithCredential(credential);
+          // guardar na base de dados
+          FirebaseUser user = result.user;
+          // criar novo documento para o utilzador com aquele uid
+          await DatabaseService(uid: user.uid).updateUserData(count+1, "User_icon_BLACK-01.png", user.displayName, user.email, "F", "123456", 963853790, DateTime.now());
+          return _userFromFirebaseUser(user);
+          break;
+        case FacebookLoginStatus.error:
+          print("ERROR");
+          break;
+      }
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+
+  }
+
   // register with email and password
   Future registerWithEmailAndPassword(String email, String password) async {
     try {
@@ -93,6 +126,7 @@ class AuthService {
     try {
       return await _auth.signOut().then((onValue){
         _googleSignIn.signOut();
+        _facebookLogin.logOut();
       });
     } catch (error) {
       print(error.toString());

@@ -206,8 +206,19 @@ class SignInState extends State<SignIn>{
                       label: Text("")
                   ),
                   FlatButton.icon(
-                      onPressed: null,
-                      icon: Icon(FontAwesomeIcons.facebook),
+                      onPressed: () async{
+                        dynamic result = await _auth.signInWithFacebook();
+                        if(result == null) {
+                          setState(() {
+                            error = 'User not valid! ';
+                            loading = false;
+                          });
+                        }
+                        else{
+                          Navigator.of(context).pushNamed(Home.tag);
+                        }
+                      },
+                      icon: Icon(FontAwesomeIcons.facebook, color: Colors.grey,),
                       label: Text("")
                   )
                 ],
