@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gym_power/home.dart';
 import 'package:gym_power/loading.dart';
 import 'package:gym_power/service/auth.dart';
@@ -184,6 +186,32 @@ class SignInState extends State<SignIn>{
               forgotLabel,
               loginButton,
               createaccountLabel,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FlatButton.icon(
+                      onPressed: () async{
+                        dynamic result = await _auth.signInWithGoogle();
+                        if(result == null) {
+                          setState(() {
+                            error = 'User not valid! ';
+                            loading = false;
+                          });
+                        }
+                        else{
+                          Navigator.of(context).pushNamed(Home.tag);
+                        }
+                      },
+                      icon: Icon(FontAwesomeIcons.google, color: Colors.grey,),
+                      label: Text("")
+                  ),
+                  FlatButton.icon(
+                      onPressed: null,
+                      icon: Icon(FontAwesomeIcons.facebook),
+                      label: Text("")
+                  )
+                ],
+              ),
             ],
         ),
         ),

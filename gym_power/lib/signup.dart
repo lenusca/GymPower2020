@@ -123,8 +123,6 @@ class SignUpState extends State<SignUp>{
           //validate vai validar, retorna true ou false
           if(_formKey.currentState.validate()){
             // vai buscar o utilizador
-            //print(mail);
-            //print(pass);
             setState(() {
               loading = true;
             });

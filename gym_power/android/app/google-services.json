@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "824542534065-nbp2d3ac4vp8tf06fkh1vqmfsa2kjsgd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gym_power",
+            "certificate_hash": "0d99aa60037c36cbcb2fe63dab88ebd312174065"
+          }
+        },
+        {
           "client_id": "824542534065-iht3jf10c9g3472k3celjuvgle93dipo.apps.googleusercontent.com",
           "client_type": 3
         }
