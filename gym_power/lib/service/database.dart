@@ -17,7 +17,7 @@ class DatabaseService{
     // para ir buscar a imagem
 
     String urlImage = "";
-    if(img.contains("https://firebasestorage")){
+    if(img.contains("https://")){
       urlImage = img;
     }
 

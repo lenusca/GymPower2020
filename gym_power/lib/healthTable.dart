@@ -3,10 +3,8 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_power/loading.dart';
-import 'package:gym_power/models/health.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/auth.dart';
-import 'package:gym_power/service/database.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 

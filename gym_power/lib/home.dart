@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gym_power/TabClass.dart';
 import 'package:gym_power/TabHealth.dart';
-import 'package:gym_power/healthTable.dart';
-import 'package:gym_power/loading.dart';
 import 'package:gym_power/map.dart';
-import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/auth.dart';
-import 'package:gym_power/service/database.dart';
 import 'package:gym_power/settings.dart';
-import 'package:gym_power/sidebar.dart';
 import 'package:gym_power/signin.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 class Home extends StatefulWidget {
   static String tag = "home";
@@ -108,7 +103,7 @@ class HomeState extends State<Home> {
 
                       child: InkWell(
                         onTap: (){
-                          Navigator.of(context).pushNamed(Settings.tag);
+                          Navigator.of(context).pushNamed(TabClass.tag);
                         },
                         splashColor: Colors.white,
                         child: Center(

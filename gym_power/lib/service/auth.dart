@@ -63,7 +63,7 @@ class AuthService {
       FirebaseUser user = result.user;
       // criar novo documento para o utilzador com aquele uid
 
-      await DatabaseService(uid: user.uid).updateUserData(count+1, "User_icon_BLACK-01.png", user.displayName, user.email, "F", "123456", 963853790, DateTime.now());
+      await DatabaseService(uid: user.uid).updateUserData(count+1, user.photoUrl, user.displayName, user.email, "F", "123456", 963853790, DateTime.now());
       return _userFromFirebaseUser(user);
 
     } catch (error) {
@@ -89,8 +89,9 @@ class AuthService {
           AuthResult result = await _auth.signInWithCredential(credential);
           // guardar na base de dados
           FirebaseUser user = result.user;
+          print(user.photoUrl);
           // criar novo documento para o utilzador com aquele uid
-          await DatabaseService(uid: user.uid).updateUserData(count+1, "User_icon_BLACK-01.png", user.displayName, user.email, "F", "123456", 963853790, DateTime.now());
+          await DatabaseService(uid: user.uid).updateUserData(count+1, user.photoUrl, user.displayName, user.email, "F", "123456", 963853790, DateTime.now());
           return _userFromFirebaseUser(user);
           break;
         case FacebookLoginStatus.error:

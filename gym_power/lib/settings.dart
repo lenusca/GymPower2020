@@ -143,7 +143,7 @@ class SettingsState extends State<Settings> {
 
                           FlatButton.icon(
                             icon: Icon(Icons.calendar_today, color: Colors.grey,),
-                            label: Text('Birth', style: TextStyle(color: Colors.grey)),
+                            label: _currentDtNasci!=null?Text('Birth '+ _currentDtNasci.day.toString()+"/"+_currentDtNasci.month.toString()+"/"+_currentDtNasci.year.toString(), style: TextStyle(color: Colors.grey)):Text('Birth '+ snapshot.data.dtNasci.day.toString()+"/"+snapshot.data.dtNasci.month.toString()+"/"+snapshot.data.dtNasci.year.toString(), style: TextStyle(color: Colors.grey)),
                             onPressed: () {
                               showDatePicker(
 
