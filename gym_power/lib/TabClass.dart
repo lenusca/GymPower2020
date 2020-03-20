@@ -1,13 +1,9 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gym_power/class.dart';
 import 'package:gym_power/home.dart';
 import 'package:gym_power/loading.dart';
-import 'package:gym_power/models/classes.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/database.dart';
 import 'package:gym_power/sidebar.dart';
@@ -21,6 +17,7 @@ class TabClass extends StatefulWidget {
 
 class TabClassState extends State<TabClass> {
   final List<Card> buttonClass = [];
+
   bottomClass(documents, String nome, String img, int numSocio){
     buttonClass.clear();
     print(documents.length);
@@ -129,7 +126,6 @@ class TabClassState extends State<TabClass> {
         }
         else{
           bottomClass(snapshot.data.documents, nome, img, numSocio);
-          print("AQUI"+buttonClass.length.toString());
           return ListView.builder(
               itemCount: buttonClass.length,
               itemBuilder: (BuildContext context, int index){
@@ -167,10 +163,12 @@ class TabClassState extends State<TabClass> {
                 bottom: TabBar(
 
                   isScrollable: true,
-                  indicatorWeight: 6.0,
+                  indicatorWeight: 2.0,
                   indicatorColor: Colors.white,
                   tabs: [
-                    Tab(child: Text("Classes", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                    Tab(child: Container(
+                      child: Text("ClASSES", style: TextStyle(color: Colors.white, fontSize: 16),),),
+                    ),
                     //Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 24),),),
                   ],
                 ),

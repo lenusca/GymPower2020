@@ -45,8 +45,10 @@ class HealthTableState extends State<HealthTable> {
     dataDropDown2(documents){
       List<String> data = [];
       for(int i=0; i < documents.length; i++){
+        if(_currentDate != DateFormat("dd-MM-yyyy").format(documents[i]['data'].toDate()).toString()){
+          data.add(DateFormat("dd-MM-yyyy").format(documents[i]['data'].toDate()).toString());
+        }
 
-        data.add(DateFormat("dd-MM-yyyy").format(documents[i]['data'].toDate()).toString());
       }
       return DropdownButton(
         value: _currentDate2,
@@ -142,7 +144,7 @@ class HealthTableState extends State<HealthTable> {
 
     return  Scaffold(
           body: StreamBuilder(
-              stream: Firestore.instance.collection('planoSaude').where('userID', isEqualTo: user.uid).snapshots(),
+              stream: Firestore.instance.collection('planoSaude').where('userID', isEqualTo: user.uid).orderBy('data', descending: false).snapshots(),
               builder: (context, snapshot){
                 if(!snapshot.hasData){
                   return Loading();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_power/healthGraph.dart';
 import 'package:gym_power/healthTable.dart';
 import 'package:gym_power/home.dart';
 import 'package:gym_power/loading.dart';
@@ -24,7 +25,7 @@ class TabHealthState extends State<TabHealth> {
           if(snapshot.hasData){
           UserData userData = snapshot.data;
           return  DefaultTabController(
-            length: 1, //
+            length: 2, //
             child: Scaffold(
               appBar: AppBar(
                 title: Text("Health", style: TextStyle(color: Colors.white, fontSize: 25)),
@@ -39,22 +40,20 @@ class TabHealthState extends State<TabHealth> {
                   )
                 ],
                 bottom: TabBar(
-
                   isScrollable: true,
-                  indicatorWeight: 6.0,
+                  indicatorWeight: 2.0,
                   indicatorColor: Colors.white,
-                    tabs: [
-                      Tab(child: Text("TABLE", style: TextStyle(color: Colors.white, fontSize: 15),),),
-                      //Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 24),),),
-                      //Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 24),),),
-                    ],
+                  tabs: <Widget>[
+                    Tab(child: Text("TABLE", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                    Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                  ],
                 ),
               ),
               drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
               body: TabBarView(
-                children: [
+                children: <Widget>[
                   HealthTable(), // Nome da função que queres que apareça
-                  //WorkActivities(), // Nome da função que queres que apareça
+                  HealthGraph(), // Nome da função que queres que apareça
                 ],
               ),
             ),
