@@ -8,6 +8,7 @@ import 'package:gym_power/map.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
+import 'package:gym_power/camera.dart';
 import 'package:provider/provider.dart';
 
 import 'models/user.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
     gpsMap.tag: (context) => gpsMap(),
     TabClass.tag: (context) => TabClass(),
     GymClass.tag: (context) => GymClass(),
+    Camera.tag: (context) => Camera(),
   };
 
   @override

@@ -6,6 +6,7 @@ import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
+import 'package:gym_power/camera.dart';
 
 import 'TabHealth.dart';
 
@@ -83,7 +84,17 @@ class SideBar extends StatelessWidget {
                 title: Text("My Activities", style: new TextStyle(fontSize: 20.0),),
               ),
             ),
+            //QR Code Camera
+            InkWell(
+              onTap: (){
+                Navigator.of(context).pushNamed(Camera.tag);
+              },
 
+              child: ListTile(
+                leading: Icon(Icons.camera_alt, color: Colors.black,size: 35.0,),
+                title: Text("QR Scanner", style: new TextStyle(fontSize: 20.0)),
+              ),
+            ),
             //Settings
             InkWell(
               onTap: (){

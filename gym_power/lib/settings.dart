@@ -110,13 +110,70 @@ class SettingsState extends State<Settings> {
                           SizedBox(height:10.0),
                           // update do nome
                           TextFormField(
-                            decoration: InputDecoration(labelText: 'Name'),
+                            decoration: new InputDecoration(
+                              contentPadding: new EdgeInsets.symmetric(vertical:0.0, horizontal: 0.0),
+                              fillColor: Colors.white,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                              ),
+                              border: new OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(32.0),
+                                  borderSide: new BorderSide(color: Colors.deepOrangeAccent[200])
+                              ),
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child:Icon(Icons.perm_identity, color: Colors.deepOrange[200]),
+                              ),
+                              //icon: Icon(Icons.person),
+                              filled: false,
+                              hintText: 'First and Last Name',
+                              labelText: 'Name',
+                              labelStyle: TextStyle(inherit: true),
+                            ),
+                            cursorColor: Colors.deepOrangeAccent[200],
+                            style: TextStyle(fontSize: 18),
+                            textAlign: TextAlign.left,
                             initialValue: userData.nome,
                             validator: (val) => val.isEmpty ? 'Please enter a name' : null,
                             onChanged: (val) => setState(() => _currentName = val),
                           ),
-                          SizedBox(height: 10.0,),
-
+                          SizedBox(height: 30.0,),
+                          //Phone Number
+                          TextFormField(
+                            decoration: InputDecoration(
+                                contentPadding: new EdgeInsets.symmetric(vertical:0.0, horizontal: 0.0),
+                                border:OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(32.0)
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(15.0),
+                                  child:Icon(Icons.phone_android, color: Colors.deepOrange[200],),
+                                ),
+                                //icon: Icon(Icons.person),
+                                filled: true,
+                                fillColor: Colors.white,
+                                labelText: 'Phone Number'
+                            ),
+                            cursorColor: Colors.deepOrangeAccent[200],
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                            initialValue: userData.telemovel.toString(),
+                            // passar para inteiro
+                            onChanged: (val) => setState(() => _currentTelemovel = num.tryParse(val)),
+                          ),
+                          SizedBox(height: 30.0,),
+                          //Fazer two button for gender
                           DropdownButtonFormField(
                             decoration: InputDecoration(labelText: 'Gender'),
                             value: _currentSexo ?? userData.sexo,
@@ -128,19 +185,8 @@ class SettingsState extends State<Settings> {
                             }).toList(),
                             onChanged: (val) => setState(() => _currentSexo = val),
                           ),
-                          SizedBox(height: 10.0,),
-
-                          TextFormField(
-                            decoration: InputDecoration(labelText: 'Phone Number'),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                            initialValue: userData.telemovel.toString(),
-                            // passar para inteiro
-                            onChanged: (val) => setState(() => _currentTelemovel = num.tryParse(val)),
-
-                          ),
-                          SizedBox(height: 10.0,),
-
+                          SizedBox(height: 30.0,),
+                          //Date birthDay
                           FlatButton.icon(
                             icon: Icon(Icons.calendar_today, color: Colors.grey,),
                             label: _currentDtNasci!=null?Text('Birth '+ _currentDtNasci.day.toString()+"/"+_currentDtNasci.month.toString()+"/"+_currentDtNasci.year.toString(), style: TextStyle(color: Colors.grey)):Text('Birth '+ snapshot.data.dtNasci.day.toString()+"/"+snapshot.data.dtNasci.month.toString()+"/"+snapshot.data.dtNasci.year.toString(), style: TextStyle(color: Colors.grey)),
@@ -160,7 +206,7 @@ class SettingsState extends State<Settings> {
                             },
                           ),
 
-
+                          //Button Save
                           RaisedButton(
                             color: Colors.deepOrangeAccent[200],
                             child: Text('Save', style: TextStyle(color: Colors.white),),
