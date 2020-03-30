@@ -100,7 +100,7 @@ class _GymClassState extends State<GymClass> {
                         height: 30,
                         margin: EdgeInsets.fromLTRB(10, 250, 20, 0),
                         alignment: Alignment.centerRight,
-                      
+
                         child: Text(snapshot.data['inscritos'].toString()+"/"+snapshot.data['limite'].toString(), style: TextStyle(color: Colors.deepOrangeAccent[200]),),
                       ),
                       Container(
