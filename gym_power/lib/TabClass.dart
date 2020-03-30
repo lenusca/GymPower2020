@@ -8,6 +8,7 @@ import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/database.dart';
 import 'package:gym_power/sidebar.dart';
 import 'package:provider/provider.dart';
+import 'package:gym_power/classDetails.dart';
 
 class TabClass extends StatefulWidget {
   static String tag = 'TabClass';
@@ -100,8 +101,8 @@ class TabClassState extends State<TabClass> {
                         icon: Icon(FontAwesomeIcons.infoCircle, size: 20, color: Colors.white,),
                         splashColor: Colors.transparent,
                         onPressed: (){
-                          print(documents[i].documentID);
-                          print(documents[i].data['idaula']);
+                         var route = new MaterialPageRoute(builder: (BuildContext context) => new GymClass( uid: documents[i].documentID,  nome: nome, img: img, numSocio: numSocio, ));
+                          Navigator.of(context).push(route);
                         },
                       )
                   ),
@@ -186,14 +187,11 @@ class TabClassState extends State<TabClass> {
         else {
           return Loading();
         }
-
-
       },
     );
-
-
-
   }
-
 }
+
+
+
 
