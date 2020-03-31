@@ -85,17 +85,7 @@ class SideBar extends StatelessWidget {
               ),
             ),
             //QR Code Camera
-            InkWell(
-              onTap: (){
-                Navigator.of(context).pushNamed(Camera.tag);
-              },
 
-              child: ListTile(
-                leading: Icon(Icons.camera_alt, color: Colors.black,size: 35.0,),
-                title: Text("QR Scanner", style: new TextStyle(fontSize: 20.0)),
-              ),
-            ),
-            //Settings
             InkWell(
               onTap: (){
                 Navigator.of(context).pushNamed(Settings.tag);

@@ -45,9 +45,7 @@ class _CameraState extends State<Camera> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("QR Scanner"),
-      ),
+    
       body: Center(
         child: Text(
           result,

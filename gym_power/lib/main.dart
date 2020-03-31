@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gym_power/SignUp.dart';
 import 'package:gym_power/TabClass.dart';
 import 'package:gym_power/TabHealth.dart';
+import 'package:gym_power/TabWorkout.dart';
 import 'package:gym_power/class.dart';
 import 'package:gym_power/home.dart';
 import 'package:gym_power/map.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     gpsMap.tag: (context) => gpsMap(),
     TabClass.tag: (context) => TabClass(),
     GymClass.tag: (context) => GymClass(),
-    Camera.tag: (context) => Camera(),
+    TabWorkout.tag: (context) => TabWorkout(),
   };
 
   @override
