@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 
 class Camera extends StatefulWidget {
@@ -14,11 +15,15 @@ class Camera extends StatefulWidget {
 class _CameraState extends State<Camera> {
   String result = "";
 
+  
   Future _scanQR() async {
     try {
       String qrResult = await BarcodeScanner.scan();
       setState(() {
         result = qrResult;
+
+
+
       });
     } on PlatformException catch (ex) {
       if (ex.code == BarcodeScanner.CameraAccessDenied) {
@@ -40,16 +45,26 @@ class _CameraState extends State<Camera> {
       });
     }
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    
-      body: Center(
-        child: Text(
-          result,
-          style: new TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              result.toString().isEmpty?Text(""):Container(
+                padding: EdgeInsets.fromLTRB(0, 120, 0, 0),
+
+                child: YoutubePlayer(
+
+                    controller: YoutubePlayerController(
+
+                        initialVideoId: YoutubePlayer.convertUrlToId(result)
+                    ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

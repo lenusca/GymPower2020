@@ -43,6 +43,7 @@ dependencies:
   barcode_scan: ^2.0.1
   pedometer: ^1.0.0
   percent_indicator: ^2.1.1+1
+  youtube_player_flutter: ^6.1.0+4
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,9 @@ flutter:
     - assets/logo.png
     - assets/female.png
     - assets/male.png
+    - assets/heart.png
+    - assets/distance.png
+    - assets/calories.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

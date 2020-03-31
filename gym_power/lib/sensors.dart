@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -44,7 +45,7 @@ class _SensorsDataState extends State<SensorsData> {
       print(stepCount);
       setState(() {
         _stepCountValues = "$stepCount";
-        print(_stepCountValues);
+
       });
 
       var distance = stepCount;
@@ -58,7 +59,13 @@ class _SensorsDataState extends State<SensorsData> {
     var long3 = (_cntSteps / 100);
     long3 = num.parse(y.toStringAsFixed(3));
     var long4 = (long3/1000);
+
+    int decimals = 1;
+    int fac = pow(10, decimals);
+    double d = long4;
+    d = (d * fac).round() / fac;
     getDistanceRun(_cntSteps);
+
     setState(() {
       _convert = long4;
     });
@@ -68,12 +75,14 @@ class _SensorsDataState extends State<SensorsData> {
   void getDistanceRun(double _cntSteps){
     var distance = ((_cntSteps * 78)/100000);
     distance = num.parse(distance.toStringAsFixed(2));
+    var distancekm = distance * 34;
+    distancekm = num.parse(distancekm.toStringAsFixed(2));
     setState(() {
       _km = "$distance";
-      print(_km);
+
     });
     setState(() {
-      _cntKM = distance * 30;
+      _cntKM = num.parse(distancekm.toStringAsFixed(2));
     });
   }
 
@@ -82,20 +91,22 @@ class _SensorsDataState extends State<SensorsData> {
     setState(() {
       var calories = _cntKM;
       _calories = "$calories";
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    getCalories();
     return Container(
       color: Colors.white24,
       child: ListView(
-        padding: EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0,),
+        padding: EdgeInsets.only(top: 40.0, left: 5.0, right: 5.0,),
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(top: 10.0),
+
             width: 200,
-            height: 200,
+            height: 230,
             decoration: BoxDecoration(
 
               borderRadius: BorderRadius.only(
@@ -106,9 +117,10 @@ class _SensorsDataState extends State<SensorsData> {
               )
             ),
             child: CircularPercentIndicator(
-                radius: 150.0,
+                radius: 200.0,
                 lineWidth: 13.0,
                 animation: true,
+                backgroundColor: Colors.grey,
                 center: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -144,143 +156,174 @@ class _SensorsDataState extends State<SensorsData> {
               progressColor: Colors.deepOrangeAccent,
             ),
           ),
-          Divider(
-            height: 10,
-          ),
-          /*Container(
-            padding: EdgeInsets.only(left: 25.0, top: 10.0, bottom: 10.0),
+
+          Container(
+            padding: EdgeInsets.only(left: 5.0,  bottom: 0.0),
             color: Colors.transparent,
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Card(
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: null,
-                            fit: BoxFit.fitWidth,
-                          alignment: Alignment.topCenter,
+                  child:  Column(
+                    children: <Widget>[
+                      Card(
+                        child: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+
+                            image: DecorationImage(
+                              image: AssetImage("assets/distance.png"),
+                              fit: BoxFit.fill,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
+
                         ),
                       ),
-                    child: Text(
-                      "$_km Km",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.0,
-                      ),
-                    ),
-                    ),
-                    color: Colors.white54,
-                  ),
+                      Container(
+
+                          width: 150,
+                          height: 30,
+                          color: Colors.transparent,
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(left: 50.0),
+
+                                  child: Container(
+                                    child: Text(
+                                      "$_km Km",
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+
+                    ],
+                  )
                 ),
-                VerticalDivider(
-                  width: 20.0,
-                ),
+
+
+              ],
+            ),
+          ),
+
                 Container(
-                  child: Card(
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: null,
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.topCenter
+                  padding: EdgeInsets.only(left: 35.0,  bottom: 0.0),
+                  child:  Column(
+                    children: <Widget>[
+                      Card(
+                        child: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+
+                            image: DecorationImage(
+                              image: AssetImage("assets/calories.png"),
+                              fit: BoxFit.fill,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
+
                         ),
                       ),
-                    ),
-                    color: Colors.transparent,
-                  ),
-                ),
-                VerticalDivider(
-                  width: 20,
-                ),
-                Container(
-                  child: Card(
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: null,
-                            fit: BoxFit.fitWidth,
-                            alignment: Alignment.topCenter
-                        ),
+                      Container(
+
+                          width: 150,
+                          height: 30,
+                          color: Colors.transparent,
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(left: 45.0),
+
+                                  child: Container(
+                                    child: Text(
+                                      "$_calories kCal",
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )
                       ),
-                    ),
-                    color: Colors.transparent,
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          Divider(
-            height: 2,
-          ),
+
           Container(
-            padding: EdgeInsets.only(top: 2.0),
-            width: 150,
-            height: 30,
+            padding: EdgeInsets.only(left: 25.0, top: 5.0),
             color: Colors.transparent,
             child: Row(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left: 40.0),
-                  child: Card(
-                    child: Container(
-                      child: Text(
-                        "$_km Km",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
+                  padding: EdgeInsets.only(left: 70.0, bottom: 0.0),
+                  child:  Column(
+                    children: <Widget>[
+                      Card(
+                        child: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+
+                            image: DecorationImage(
+                              image: AssetImage("assets/heart.png"),
+                              fit: BoxFit.fill,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
 
                         ),
                       ),
-                    ),
-                  ),
+                      Container(
+                          padding: EdgeInsets.only(left: 15.0),
+                          width: 150,
+                          height: 30,
+                          color: Colors.transparent,
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(left: 40.0),
 
+                                  child: Container(
+                                    child: Text(
+                                      "Soon",
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+
+                                  ),
+                                ),
+
+                              ),
+                            ],
+                          )
+                      ),
+
+
+                    ],
+                  ),
                 ),
-                VerticalDivider(width: 20.0,),
-                Container(
-                  padding: EdgeInsets.only(left: 10.0),
-                  child: Card(
-                    child: Container(
-                      child: Text(
-                        "$_calories kCal",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
 
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                VerticalDivider(width: 20.0,),
-                Container(
-                  padding: EdgeInsets.only(left: 10.0),
-                  child: Card(
-                    child: Container(
-                      child: Text(
-                        "$_stepCountValues Steps",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-
-                        ),
-                      ),
-                    ),
-                  ),
-                ),*/
-              //],
-            //),
-          //),
+              ],
+            ),
+          ),
         ],
       ),
     );
