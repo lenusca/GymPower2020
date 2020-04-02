@@ -26,7 +26,7 @@ class _TabWorkoutState extends State<TabWorkout> {
             length: 1, //
             child: Scaffold(
               appBar: AppBar(
-                title: Text("Health", style: TextStyle(color: Colors.white, fontSize: 25)),
+                title: Text("Workout", style: TextStyle(color: Colors.white, fontSize: 25)),
                 backgroundColor: Colors.deepOrangeAccent[200],
                 actions: <Widget>[
                   IconButton(

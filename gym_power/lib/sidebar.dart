@@ -1,6 +1,8 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gym_power/TabClass.dart';
+import 'package:gym_power/TabWorkout.dart';
 import 'package:gym_power/map.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/auth.dart';
@@ -43,7 +45,7 @@ class SideBar extends StatelessWidget {
             //workout
             InkWell(
               onTap: (){
-
+                Navigator.of(context).pushNamed(TabWorkout.tag);
               },
               child: ListTile(
                 leading: Icon(Icons.fitness_center, color: Colors.black, size: 35.0,),
@@ -55,7 +57,7 @@ class SideBar extends StatelessWidget {
             //class map
             InkWell(
               onTap: (){
-                //Navigator.of(context).pushNamed(Settings.tag);
+                Navigator.of(context).pushNamed(TabClass.tag);
               },
               child: ListTile(
                 leading: Icon(FontAwesomeIcons.users, color: Colors.black, size: 32.0,),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -14,6 +15,8 @@ class Camera extends StatefulWidget {
 
 class _CameraState extends State<Camera> {
   String result = "";
+  String url = "";
+  String name = "";
 
   
   Future _scanQR() async {
@@ -21,9 +24,10 @@ class _CameraState extends State<Camera> {
       String qrResult = await BarcodeScanner.scan();
       setState(() {
         result = qrResult;
-
-
-
+        url = result.split("\n")[1];
+        name = result.split("\n")[0];
+        print(url);
+        print(name);
       });
     } on PlatformException catch (ex) {
       if (ex.code == BarcodeScanner.CameraAccessDenied) {
@@ -47,22 +51,33 @@ class _CameraState extends State<Camera> {
   }
   @override
   Widget build(BuildContext context) {
+    print(url);
     return Scaffold(
       body: Container(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              result.toString().isEmpty?Text(""):Container(
-                padding: EdgeInsets.fromLTRB(0, 120, 0, 0),
-
-                child: YoutubePlayer(
-
-                    controller: YoutubePlayerController(
-
-                        initialVideoId: YoutubePlayer.convertUrlToId(result)
-                    ),
-                ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                child: Text(name, style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 20, fontWeight: FontWeight.w400),),
               ),
+
+              result.toString().isEmpty?Text(""):Container(
+                padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+
+
+
+
+                    child:YoutubePlayer(
+
+                      controller: YoutubePlayerController(
+
+                          initialVideoId: YoutubePlayer.convertUrlToId(url)
+                      ),
+                    ),
+
+              ),
+
             ],
           ),
         ),
