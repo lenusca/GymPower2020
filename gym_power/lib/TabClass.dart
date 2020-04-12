@@ -208,10 +208,9 @@ class TabClassState extends State<TabClass> {
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
         if(snapshot.hasData){
-
           UserData userData = snapshot.data;
           return  DefaultTabController(
-            length: 3, //
+            length: 3,
             child: Scaffold(
               appBar: AppBar(
                 title: Text("Class Map", style: TextStyle(color: Colors.white, fontSize: 25)),

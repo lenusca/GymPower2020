@@ -63,7 +63,7 @@ class AuthService {
       FirebaseUser user = result.user;
       // criar novo documento para o utilzador com aquele uid
 
-      await DatabaseService(uid: user.uid).updateUserData(count+1, user.photoUrl, user.displayName, user.email, "F", "123456", 963853790, DateTime.now(),  new List<Map<String, String>>());
+      await DatabaseService(uid: user.uid).updateUserData(count+1, user.photoUrl, user.displayName, user.email, "F", "123456", 963853790, DateTime.now());
       return _userFromFirebaseUser(user);
 
     } catch (error) {
@@ -91,7 +91,7 @@ class AuthService {
           FirebaseUser user = result.user;
           print(user.photoUrl);
           // criar novo documento para o utilzador com aquele uid
-          await DatabaseService(uid: user.uid).updateUserData(count+1, user.photoUrl, user.displayName, user.email, "F", "123456", 963853790, DateTime.now(),  new List<Map<String, String>>());
+          await DatabaseService(uid: user.uid).updateUserData(count+1, user.photoUrl, user.displayName, user.email, "F", "123456", 963853790, DateTime.now());
           return _userFromFirebaseUser(user);
           break;
         case FacebookLoginStatus.error:
@@ -114,7 +114,7 @@ class AuthService {
       FirebaseUser user = result.user;
 
       // criar novo documento para o utilzador com aquele uid
-      await DatabaseService(uid: user.uid).updateUserData(count+1, "User_icon_BLACK-01.png", "Teste1", email, "F", password, 963853790, DateTime.now(), new List<Map<String, String>>());
+      await DatabaseService(uid: user.uid).updateUserData(count+1, "User_icon_BLACK-01.png", "Teste1", email, "F", password, 963853790, DateTime.now());
       return _userFromFirebaseUser(user);
     } catch (error) {
       print(error.toString());
