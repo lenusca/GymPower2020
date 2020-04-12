@@ -91,15 +91,26 @@ class SignInState extends State<SignIn>{
         //initialValue: 'Helena',
         decoration: InputDecoration(
             hintText: 'Username',
-            icon: new Icon(
+             prefixIcon: new Padding(
+              padding: EdgeInsets.all(15.0),
+              child: new Icon(
               Icons.account_circle,
-              color: Colors.grey,
-            ),
+              color: Colors.deepOrange[200],
+            ),),
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(32.0)
-            )
+              borderRadius: BorderRadius.circular(32.0),
+              borderSide:  new BorderSide(color: Colors.deepOrangeAccent[200]),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25.0),
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+            ),
         ),
+      style: TextStyle(fontSize: 18),
       validator: (val) => val.isEmpty ? "Enter an Email valid":null, //verifica se inseriu alguma coisa
       onChanged: (val){
         setState(() => mail = val);
@@ -113,15 +124,26 @@ class SignInState extends State<SignIn>{
         obscureText: true,
         decoration: InputDecoration(
             hintText: 'Password',
-            icon: new Icon(
+            prefixIcon: new Padding(
+              padding: EdgeInsets.all(15.0),
+              child: new Icon(
               Icons.lock,
-              color: Colors.grey,
-            ),
+              color: Colors.deepOrange[200],
+            ),),
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(32.0)
-            )
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide:  new BorderSide(color: Colors.deepOrangeAccent[200]),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25.0),
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+            ),
         ),
+      style: TextStyle(fontSize: 18), 
       validator: (val) => val.length < 6 ? "Password should be at least 6 characters" : null, //obrigatorio ter no minimo 6 carateres
       onChanged: (val){
         setState(() => pass = val);

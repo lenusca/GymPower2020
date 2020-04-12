@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_power/introScreen.dart';
 import 'package:gym_power/loading.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/home.dart';
@@ -37,15 +38,26 @@ class SignUpState extends State<SignUp>{
       autofocus: false,
       decoration: InputDecoration(
           hintText: 'Email',
-          icon: new Icon(
-            Icons.mail,
-            color: Colors.grey,
-          ),
+          prefixIcon: new Padding(
+              padding: EdgeInsets.all(15.0),
+              child: new Icon(
+              Icons.mail,
+              color: Colors.deepOrange[200],
+            ),),
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(32.0)
-          )
+              borderRadius: BorderRadius.circular(32.0),
+              borderSide:  new BorderSide(color: Colors.deepOrangeAccent[200]),
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25.0),
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+          ),
       ),
+      style: TextStyle(fontSize: 18),
       //parte da base de dados
       validator: (val) => val.isEmpty ? "Enter an Email valid":null, //verifica se inseriu alguma coisa
       onChanged: (val){
@@ -76,10 +88,12 @@ class SignUpState extends State<SignUp>{
       obscureText: true,
       decoration: InputDecoration(
         hintText: 'Password',
-        icon: new Icon(
-          Icons.lock,
-          color: Colors.grey,
-        ),
+        prefixIcon: new Padding(
+              padding: EdgeInsets.all(15.0),
+              child: new Icon(
+              Icons.lock,
+              color: Colors.deepOrange[200],
+            ),),
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0)
@@ -96,12 +110,14 @@ class SignUpState extends State<SignUp>{
     final confirmpassword = TextFormField(
       autofocus: false,
       obscureText: true,
-      decoration: InputDecoration(
+       decoration: InputDecoration(
         hintText: 'Confirm Password',
-        icon: new Icon(
-          Icons.lock,
-          color: Colors.grey,
-        ),
+        prefixIcon: new Padding(
+          padding: EdgeInsets.all(15.0),
+          child: new Icon(
+          Icons.mail,
+          color: Colors.deepOrange[200],
+        ),),
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0)
@@ -134,7 +150,8 @@ class SignUpState extends State<SignUp>{
               });
             }
             else{
-              Navigator.of(context).pushNamed(Settings.tag);
+              Navigator.push( context,
+                MaterialPageRoute(builder: (context) => IntroScreen(userID: result,)));
             }
 
           }
