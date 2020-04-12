@@ -220,7 +220,8 @@ class SettingsState extends State<Settings> {
                                     _currentSexo ?? snapshot.data.sexo,
                                     snapshot.data.pass,
                                     _currentTelemovel ?? snapshot.data.telemovel,
-                                    _currentDtNasci ?? snapshot.data.dtNasci
+                                    _currentDtNasci ?? snapshot.data.dtNasci,
+                                    snapshot.data.aulasFrequentadas
                                 );
                                 Navigator.pop(context);
                               }

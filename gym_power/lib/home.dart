@@ -7,6 +7,7 @@ import 'package:gym_power/map.dart';
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
+import 'package:gym_power/myActivities.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 class Home extends StatefulWidget {
   static String tag = "home";
@@ -154,7 +155,7 @@ class HomeState extends State<Home> {
                       color: Colors.deepOrangeAccent[200],
                       child: InkWell(
                         onTap: (){
-                          Navigator.of(context).pushNamed(Settings.tag);
+                          Navigator.of(context).pushNamed(MyActivities.tag);
                         },
                         splashColor: Colors.white,
                         child: Center(

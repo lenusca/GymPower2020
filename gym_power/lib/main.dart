@@ -11,7 +11,7 @@ import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
 import 'package:provider/provider.dart';
-
+import 'package:gym_power/myActivities.dart';
 import 'models/user.dart';
 
 void main() => runApp(MyApp());
@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
     gpsMap.tag: (context) => gpsMap(),
     TabClass.tag: (context) => TabClass(),
     TabWorkout.tag: (context) => TabWorkout(),
-    Payment.tag: (context) => Payment()
+    Payment.tag: (context) => Payment(),
+    MyActivities.tag: (context) => MyActivities()
   };
 
 

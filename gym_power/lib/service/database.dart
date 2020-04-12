@@ -13,7 +13,7 @@ class DatabaseService{
 
 
   // chamada quand é registrado e quando ha update dos dados
-  Future<void> updateUserData(int numSocio, String img, String nome, String email, String sexo, String pass, int telemovel, DateTime dtNasci) async{
+  Future<void> updateUserData(int numSocio, String img, String nome, String email, String sexo, String pass, int telemovel, DateTime dtNasci, List<Map<String, String>> aulasFrequentadas) async{
     // para ir buscar a imagem
 
     String urlImage = "";
@@ -37,7 +37,8 @@ class DatabaseService{
       'sexo': sexo,
       'pass': pass,
       'telemovel': telemovel,
-      'dtNasci': birth
+      'dtNasci': birth,
+      'aulasFrequentadas': aulasFrequentadas
     });
 
   }
@@ -54,7 +55,8 @@ class DatabaseService{
       sexo: doc.data['sexo'],
       pass: doc.data['pass'],
       telemovel: doc.data['telemovel'],
-      dtNasci: doc.data['dtNasci'].toDate()
+      dtNasci: doc.data['dtNasci'].toDate(),
+      aulasFrequentadas: doc.data['aulasFrequentadas']
     );
   }
   
