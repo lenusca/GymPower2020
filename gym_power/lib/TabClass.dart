@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gym_power/home.dart';
@@ -18,11 +19,38 @@ class TabClass extends StatefulWidget {
 }
 
 class TabClassState extends State<TabClass> {
-  final List<Card> buttonClass = [];
 
-  bottomClass(documents, String nome, String img, int numSocio){
+
+  @override
+  final List<Card> buttonClass = [];
+  final List<SimpleDialogOption> schedule = [];
+
+
+  // Número total de inscritos
+  int inscritos(data){
+    int inscritosTotal = 0;
+    for(int i = 0; i < data.length; i++){
+      inscritosTotal += data[i];
+    }
+    return inscritosTotal;
+  }
+
+  //popup schedule
+  createAlertSchedule(BuildContext context, document) {
+    //createOptions(document);
+    return showDialog(context: context, builder: (context) {
+
+      return SimpleDialog(
+        title: Text('Choose the Class ', textAlign: TextAlign.center,),
+        children : schedule
+      );
+    });
+  }
+
+   bottomClass (documents, String nome, String img, int numSocio) async{
     buttonClass.clear();
-    print(documents.length);
+
+    // lotação total
     for(int i = 0; i < documents.length; i++){
       buttonClass.add(Card(
         semanticContainer: true,
@@ -42,26 +70,26 @@ class TabClassState extends State<TabClass> {
               fit: BoxFit.fill,
             ),
 
-            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: <Widget>[
               Row(
                 children: <Widget>[
-                    Container(
-                      width: 200,
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child:  Text(documents[i].data['nome'], style: TextStyle(color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.w500), textAlign: TextAlign.left, ),
-                    ),
+                  Container(
+                    width: 200,
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child:  Text(documents[i].data['nome'], style: TextStyle(color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.w500), textAlign: TextAlign.left, ),
+                  ),
 
-                    Container(
-                      margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                      alignment: Alignment.centerRight,
-                      color: Colors.white,
-                      child: Text(documents[i].data['inscritos'].toString()+"/"+documents[i].data['limite'].toString(), style: TextStyle(color: Colors.deepOrangeAccent[200]),),
-                    ),
-                    ],
+                  Container(
+                    margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                    alignment: Alignment.centerRight,
+                    color: Colors.white,
+                    child: Text(inscritos(documents[i].data['inscritos']).toString()+"/"+inscritos(documents[i].data['lotacao']).toString(), style: TextStyle(color: Colors.deepOrangeAccent[200]),),
+                  ),
+                ],
 
 
 
@@ -72,11 +100,46 @@ class TabClassState extends State<TabClass> {
 
                   Container(
                     margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    child: documents[i].data['inscritos']<documents[i].data['limite']?RaisedButton(
+                    child: inscritos(documents[i].data['inscritos'])<inscritos(documents[i].data['lotacao'])?RaisedButton(
                       clipBehavior: Clip.hardEdge,
-                      onPressed: () => Firestore.instance.collection('ginasioAulas').document(documents[i].documentID).updateData({'inscritos': documents[i]['inscritos']+1}).catchError((e) {
-                       print(e);
-                      }) ,
+                      onPressed: () {
+                        schedule.clear();
+                        for(int j=0; j<documents[i].data['diaSemana'].length; j++){
+                            schedule.add(
+                              SimpleDialogOption(
+                                child: Card(
+                                    shape: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            width: 0.5,
+                                            color: Colors.grey
+                                        )
+                                    ),
+                                    elevation: 0.0,
+                                    child: ListTile(
+                                        title: Text(documents[i].data['diaSemana'][j]+" "+documents[i].data['inicioHora'][j]+ " "+ documents[i].data['inscritos'][j].toString()+"/"+documents[i].data['lotacao'][j].toString(), style: TextStyle(color: Colors.deepOrange,fontSize:20),)
+                                    )),
+                                //sair do popup
+                                onPressed: () {
+
+                                  var inscritosArray = [];
+                                  inscritosArray = documents[i].data['inscritos'];
+                                  inscritosArray[j] += 1;
+                                  Firestore.instance.collection('ginasioAulas')
+                                      .document(documents[i].documentID).updateData({
+                                    'inscritos': inscritosArray
+                                  })
+                                      .catchError((e) {
+                                    print(e);
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            );
+
+                        }
+                        createAlertSchedule(context, documents[i]);
+                      },
+
                       color: Colors.deepOrangeAccent[200],
                       splashColor: Colors.deepOrangeAccent[200],
                       child: Text("RESERVE", style: TextStyle(color: Colors.white),),
@@ -102,7 +165,7 @@ class TabClassState extends State<TabClass> {
                         icon: Icon(FontAwesomeIcons.infoCircle, size: 20, color: Colors.white,),
                         splashColor: Colors.transparent,
                         onPressed: (){
-                         var route = new MaterialPageRoute(builder: (BuildContext context) => new GymClass( uid: documents[i].documentID,  nome: nome, img: img, numSocio: numSocio, ));
+                          var route = new MaterialPageRoute(builder: (BuildContext context) => new GymClass( uid: documents[i].documentID,  nome: nome, img: img, numSocio: numSocio, ));
                           Navigator.of(context).push(route);
                         },
                       )
@@ -112,10 +175,8 @@ class TabClassState extends State<TabClass> {
 
             ],
           ),
-          ),
-        ));
-      
-
+        ),
+      ));
     }
   }
 
@@ -123,29 +184,30 @@ class TabClassState extends State<TabClass> {
     return StreamBuilder(
       stream: Firestore.instance.collection('ginasioAulas').snapshots(),
       builder: (context, snapshot){
+
         if(!snapshot.hasData){
           return Loading();
         }
         else{
           bottomClass(snapshot.data.documents, nome, img, numSocio);
           return ListView.builder(
-              itemCount: buttonClass.length,
-              itemBuilder: (BuildContext context, int index){
-                return buttonClass[index];
-              },
+            itemCount: buttonClass.length,
+            itemBuilder: (BuildContext context, int index){
+              return buttonClass[index];
+            },
           );
         }
       },
     );
   }
 
-  @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
         if(snapshot.hasData){
+
           UserData userData = snapshot.data;
           return  DefaultTabController(
             length: 2, //
@@ -174,7 +236,6 @@ class TabClassState extends State<TabClass> {
                     Tab(child: Container(
                       child: Text("SCHEDULE", style: TextStyle(color: Colors.white, fontSize: 16),),),
                     ),
-                    //Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 24),),),
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_boom_menu/flutter_boom_menu.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gym_power/TabClass.dart';
 import 'package:gym_power/home.dart';
@@ -24,10 +25,24 @@ class _GymClassState extends State<GymClass> {
 
   Widget build(BuildContext context) {
     // TODO: implement build
-    print("UID"+widget.uid);
-    print("nome"+widget.nome);
-    print("img"+widget.img);
-    print("Socio"+widget.numSocio.toString());
+    List<MenuItem> data = [];
+
+    int lotacao(data){
+      int lotacaoTotal = 0;
+      for(int i = 0; i < data.length; i++){
+        lotacaoTotal += data[i];
+      }
+      return lotacaoTotal;
+    }
+
+    int inscritos(data){
+      int inscritosTotal = 0;
+      for(int i = 0; i < data.length; i++){
+        inscritosTotal += data[i];
+      }
+      return inscritosTotal;
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Class Map", style: TextStyle(color: Colors.white, fontSize: 25)),
@@ -50,6 +65,32 @@ class _GymClassState extends State<GymClass> {
                 return Loading();
               }
               else{
+                data.clear();
+                var inscritosArray = [];
+                for (int i = 0; i < snapshot.data['inicioHora'].length; i++) {
+                  inscritosArray = snapshot.data['inscritos'];
+                    data.add(MenuItem(
+                        elevation: 50.0,
+                        backgroundColor: Colors.black54,
+                        child: new Icon(FontAwesomeIcons.firstOrder, color: Colors.white54,),
+                        title: snapshot.data['diaSemana'][i],
+                        titleColor: Colors.deepOrangeAccent,
+                        subtitle: "Start: " + snapshot.data['inicioHora'][i] + "                 "+snapshot.data['inscritos'][i].toString()+"/"+snapshot.data['lotacao'][i].toString()+"\n"+ "End: " + snapshot.data['fimHora'][i],
+                        subTitleColor: Colors.white54,
+
+                        onTap: () {
+                          inscritosArray[i] += 1;
+                          Firestore.instance.collection('ginasioAulas')
+                              .document(widget.uid).updateData({
+                            'inscritos': inscritosArray
+                          })
+                              .catchError((e) {
+                            print(e);
+                          });
+                        }
+                    ));
+
+                }
                 return Container(
                   child: Stack(
                     children: <Widget>[
@@ -59,7 +100,6 @@ class _GymClassState extends State<GymClass> {
                           clipper: ClippingClass(),
                           child: Container(
                             width: MediaQuery.of(context).size.width,
-
                             height: 250.0,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
@@ -95,49 +135,55 @@ class _GymClassState extends State<GymClass> {
                           textAlign: TextAlign.justify,
                         ),
                       ),
+
                       Container(
                         width: 50,
                         height: 30,
                         margin: EdgeInsets.fromLTRB(10, 250, 20, 0),
                         alignment: Alignment.centerRight,
 
-                        child: Text(snapshot.data['inscritos'].toString()+"/"+snapshot.data['limite'].toString(), style: TextStyle(color: Colors.deepOrangeAccent[200]),),
+                        child: Text(inscritos(snapshot.data['inscritos']).toString()+"/"+lotacao(snapshot.data['lotacao']).toString(), style: TextStyle(color: Colors.deepOrangeAccent[200]),),
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(150, 460, 0, 0),
-                        child: snapshot.data['inscritos']< snapshot.data['limite']?RaisedButton(
-                          clipBehavior: Clip.hardEdge,
-                          onPressed: () => Firestore.instance.collection('ginasioAulas').document(widget.uid).updateData({'inscritos': snapshot.data['inscritos']+1}).catchError((e) {
-                            print(e);
-                          }) ,
-                          color: Colors.deepOrangeAccent[200],
-                          splashColor: Colors.deepOrangeAccent[200],
-                          child: Text("RESERVE", style: TextStyle(color: Colors.white),),
-                        ):
-                        Container(
-                          width: 105,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(FontAwesomeIcons.times, color: Colors.red,),
-                              Text("FULL", style: TextStyle(color: Colors.black),)
-                            ],
-                          ),
-                        ),
 
+                      Container(
+                        margin: EdgeInsets.fromLTRB(110, 465, 20, 0),
+                        child: Text("RESERVE", style: TextStyle(fontWeight: FontWeight.bold),),
                       ),
+
                     ],
                   ),
                 );
               }
-            })
+            }
+            ),
+      floatingActionButton: BoomMenu(
+        subtitle: "RESERVE",
+        marginRight: 110,
+        marginBottom: 45,
+        backgroundColor: Colors.deepOrangeAccent,
+        child: new Icon(Icons.add_circle),
+        titleColor: Colors.black,
+        title: "RESERVE",
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        onOpen: (){},
+        onClose: (){},
+        overlayColor: Colors.black,
+        overlayOpacity: 0.7,
+        children: data,
+      ),
     ); 
       
   }
+
+
 }
+
 
 class ClippingClass extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
+
     var path = Path();
     path.lineTo(0.0, size.height-50);
     path.quadraticBezierTo(size.width / 4, size.height,

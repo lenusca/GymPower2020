@@ -1,17 +1,19 @@
 
 import 'dart:async';
 import 'dart:math';
-
+import 'package:conreality_pulse/conreality_pulse.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+
 class SensorsData extends StatefulWidget {
   @override
   _SensorsDataState createState() => _SensorsDataState();
 }
+
 
 class _SensorsDataState extends State<SensorsData> {
   String passos = "";
@@ -22,6 +24,15 @@ class _SensorsDataState extends State<SensorsData> {
   double _cntSteps; //step count
   double _cntKM; // km count
   double _convert;
+  int _heartRate;
+
+  void HeartRate() async{
+    Stream<PulseEvent> stream = await Pulse.subscribe();
+    stream.listen((PulseEvent event) {
+      _heartRate = event.value;
+      print("Your current heart rate is: ${event.value}");
+    });
+  }
 
   @override
   void initState(){
@@ -42,7 +53,6 @@ class _SensorsDataState extends State<SensorsData> {
   }
 
   void _onData(int stepCount) async {
-      print(stepCount);
       setState(() {
         _stepCountValues = "$stepCount";
 
@@ -97,6 +107,7 @@ class _SensorsDataState extends State<SensorsData> {
 
   @override
   Widget build(BuildContext context) {
+    HeartRate();
     getCalories();
     return Container(
       color: Colors.white24,
@@ -300,7 +311,7 @@ class _SensorsDataState extends State<SensorsData> {
                                 padding: EdgeInsets.only(left: 40.0),
 
                                   child: Container(
-                                    child: Text(
+                                    child: _heartRate == null?Text(
                                       "Soon",
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
@@ -308,7 +319,16 @@ class _SensorsDataState extends State<SensorsData> {
                                         fontWeight: FontWeight.bold,
                                       ),
 
-                                  ),
+                                  ):
+                                    Text(
+                                        "$_heartRate bpm",
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+
+                                    ),
                                 ),
 
                               ),
@@ -329,3 +349,5 @@ class _SensorsDataState extends State<SensorsData> {
     );
   }
 }
+
+

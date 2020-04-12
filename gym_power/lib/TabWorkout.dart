@@ -5,6 +5,7 @@ import 'package:gym_power/loading.dart';
 import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/database.dart';
 import 'package:gym_power/sidebar.dart';
+import 'package:gym_power/workoutEasy.dart';
 import 'package:provider/provider.dart';
 
 class TabWorkout extends StatefulWidget {
@@ -42,8 +43,8 @@ class _TabWorkoutState extends State<TabWorkout> {
                   indicatorWeight: 2.0,
                   indicatorColor: Colors.white,
                   tabs: <Widget>[
-                    Tab(child: Text("QR SCANNER", style: TextStyle(color: Colors.white, fontSize: 15),),),
-                    //Tab(child: Text("TABLE", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                    //Tab(child: Text("QR SCANNER", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                    Tab(child: Text("EASY", style: TextStyle(color: Colors.white, fontSize: 15),),),
                     //Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 15),),),
                   ],
                 ),
@@ -51,7 +52,8 @@ class _TabWorkoutState extends State<TabWorkout> {
               drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
               body: TabBarView(
                 children: <Widget>[
-                  Camera(),
+                  //Camera(),
+                   WorkoutEasy(userID: user.uid,),
                    // Nome da função que queres que apareça
                 ],
               ),

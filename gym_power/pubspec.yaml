@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -36,15 +36,16 @@ dependencies:
   flutter_facebook_login: ^3.0.0
   charts_flutter: ^0.9.0
   flutter_timetable_view: ^0.1.0
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   introduction_screen: ^1.0.8
   barcode_scan: ^2.0.1
   pedometer: ^1.0.0
   percent_indicator: ^2.1.1+1
   youtube_player_flutter: ^6.1.0+4
-
+  conreality_pulse: ^0.1.0
+  flutter_boom_menu: ^1.0.2
+  firebase_messaging: ^6.0.13
+  flutter_local_notifications: ^1.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,14 +1,15 @@
-import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gym_power/TabClass.dart';
 import 'package:gym_power/TabWorkout.dart';
 import 'package:gym_power/map.dart';
-import 'package:gym_power/models/user.dart';
+import 'package:gym_power/payment.dart';
+
 import 'package:gym_power/service/auth.dart';
 import 'package:gym_power/settings.dart';
 import 'package:gym_power/signin.dart';
-import 'package:gym_power/camera.dart';
+
 
 import 'TabHealth.dart';
 
@@ -107,6 +108,17 @@ class SideBar extends StatelessWidget {
               child: ListTile(
                 leading: Icon(FontAwesomeIcons.mapMarkerAlt, color: Colors.black,size: 35.0,),
                 title: Text("Localization", style: new TextStyle(fontSize: 20.0)),
+              ),
+            ),
+
+            //Payment
+            InkWell(
+              onTap: (){
+                Navigator.of(context).pushNamed(Payment.tag);
+              },
+              child: ListTile(
+                leading: Icon(FontAwesomeIcons.wallet, color: Colors.black,size: 35.0,),
+                title: Text("Payment", style: new TextStyle(fontSize: 20.0)),
               ),
             ),
 

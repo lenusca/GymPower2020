@@ -1,6 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gym_power/home.dart';
 import 'package:gym_power/loading.dart';
 import 'package:gym_power/service/auth.dart';
@@ -14,12 +15,63 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn>{
+  final FirebaseMessaging _messaging = FirebaseMessaging();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationPugin = new FlutterLocalNotificationsPlugin();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>(); //usada para validação
   bool loading = false;
   String mail = '';
   String pass = '';
   String error = '';
+
+  @override
+  void initState(){
+    super.initState();
+    var initializationSettingsAndroid= new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationPugin = new FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationPugin.initialize(initializationSettings);
+    _messaging.configure(
+      onLaunch: (Map<String, dynamic> msg){
+        print(" onLaunch called " + msg.toString());
+      },
+      onResume: (Map<String, dynamic> msg){
+        print(" onResume called" + msg.toString());
+      },
+      onMessage: (Map<String, dynamic> msg){
+        _showNotification(msg);
+        print(" onMessage called" + msg.toString());
+      }
+    );
+    _messaging.requestNotificationPermissions(
+      IosNotificationSettings(alert: true, sound: true, badge: true)
+    );
+    _messaging.onIosSettingsRegistered.listen((IosNotificationSettings setting){
+      print('IOS Settings Registed');
+    });
+
+    _messaging.getToken().then((token){
+      update(token);
+    });
+  }
+
+  Future _showNotification(Map<String, dynamic> msg) async {
+    var androidPlataformChannerSpecifics = new AndroidNotificationDetails(
+        'your channel ID', 'your channel name', 'your channel description',
+        importance: Importance.Max,
+        priority: Priority.High,
+        ticker: 'test'
+    );
+    var iosPlataformChannerSpecifics = new IOSNotificationDetails();
+
+    var platformChannelSpecifics = new NotificationDetails(androidPlataformChannerSpecifics, iosPlataformChannerSpecifics);
+
+    await flutterLocalNotificationPugin.show(0, 'Monthly payment', 'Reference for payment of monthly fees is now available ', platformChannelSpecifics, payload: 'Default_Sound');
+  }
+  update(String token){
+    print(token);
+  }
 
   @override
   Widget build(BuildContext context){
