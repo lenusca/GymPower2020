@@ -252,7 +252,7 @@ class SettingsState extends State<Settings> {
                           FlatButton.icon(
                             icon: Icon(Icons.calendar_today, color: Colors.deepOrange[200]),
                             shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0),side: BorderSide(color: Colors.grey, width: 1)),
-                            padding: EdgeInsets.symmetric(vertical:15.0, horizontal: 78.0),
+                            padding: EdgeInsets.symmetric(vertical:15.0, horizontal: 65.0),
                             label: _currentDtNasci!=null?Text('Birth '+ _currentDtNasci.day.toString()+"/"+_currentDtNasci.month.toString()+"/"+_currentDtNasci.year.toString(), 
                             style: TextStyle(color: Colors.grey,fontSize: 18.0,)):Text('Birth '+ snapshot.data.dtNasci.day.toString()+"/"+snapshot.data.dtNasci.month.toString()+"/"+snapshot.data.dtNasci.year.toString(), 
                               style: TextStyle(color: Colors.grey, fontSize: 18.0)),
