@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_power/home.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as Path;
 import 'package:gym_power/loading.dart';
 import 'package:gym_power/models/user.dart';
@@ -28,10 +31,26 @@ class SettingsState extends State<Settings> {
   String _currentName, _currentPassword, _currentSexo, _currentImg;
   int _currentTelemovel;
   DateTime _currentDtNasci;
-  final List<String> sexoList = ['F', 'M', 'Undetermined'];
+  //final List<String> sexoList = ['F', 'M'];
+  Color _iColorFemale = Colors.deepOrange[200];
+  Color _iColorMale = Colors.deepOrange[200];
+
+  void __iconColorFemale(String _currentSexo) {
+    if(_currentSexo=='F'){
+      _iColorFemale = Colors.deepOrangeAccent[200];
+    }
+    else{ _iColorFemale = Colors.deepOrange[200]; }
+  }
+
+  void __iconColorMale(String _currentSexo) {
+     if(_currentSexo=='M'){
+      _iColorMale = Colors.deepOrangeAccent[200];
+    }
+    else{ _iColorMale = Colors.deepOrange[200]; }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     Future uploadImage() async{
       StorageReference ref = FirebaseStorage.instance.ref().child(filename);
       StorageUploadTask upload = ref.putFile(_img);
@@ -52,11 +71,14 @@ class SettingsState extends State<Settings> {
     };
 
     User user = Provider.of<User>(context);
+
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
         if(snapshot.hasData){
           UserData userData = snapshot.data;
+          if(userData.sexo=='F' && _currentSexo==null){_iColorFemale = Colors.deepOrangeAccent[200];}
+          if(userData.sexo=='M' && _currentSexo==null){_iColorMale = Colors.deepOrangeAccent[200];}
           return Container(
             child: Scaffold(
               drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
@@ -64,8 +86,7 @@ class SettingsState extends State<Settings> {
                 title: Text("Account Settings", style: TextStyle(color: Colors.white, fontSize: 25)),
                 backgroundColor: Colors.deepOrangeAccent[200],
                 actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.home),
+                  IconButton(icon: Icon(Icons.home),
                     color: Colors.white,
                     onPressed:(){
                       Navigator.of(context).pushNamed(Home.tag);
@@ -128,7 +149,6 @@ class SettingsState extends State<Settings> {
                                 padding: EdgeInsets.all(15.0),
                                 child:Icon(Icons.perm_identity, color: Colors.deepOrange[200]),
                               ),
-                              //icon: Icon(Icons.person),
                               filled: false,
                               hintText: 'First and Last Name',
                               labelText: 'Name',
@@ -160,7 +180,6 @@ class SettingsState extends State<Settings> {
                                   padding: EdgeInsets.all(15.0),
                                   child:Icon(Icons.phone_android, color: Colors.deepOrange[200],),
                                 ),
-                                //icon: Icon(Icons.person),
                                 filled: true,
                                 fillColor: Colors.white,
                                 labelText: 'Phone Number'
@@ -173,23 +192,70 @@ class SettingsState extends State<Settings> {
                             onChanged: (val) => setState(() => _currentTelemovel = num.tryParse(val)),
                           ),
                           SizedBox(height: 30.0,),
-                          //Fazer two button for gender
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: 'Gender'),
-                            value: _currentSexo ?? userData.sexo,
-                            items: sexoList.map((sexo){
-                              return DropdownMenuItem(
-                                  value: sexo,
-                                  child: Text('$sexo')
-                              );
-                            }).toList(),
-                            onChanged: (val) => setState(() => _currentSexo = val),
+                          //GENDER
+                          Row(
+                            children: <Widget>[
+                              //Female
+                              Center(
+                                widthFactor: 2.60,
+                                child: Ink(
+                                  decoration: new BoxDecoration(
+                                    //color: Color(0xFFEEEEEE),
+                                    shape:  BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(width: 2.0, color: _iColorFemale),
+                                  ),
+                                  child: IconButton(
+                                  icon: FaIcon(FontAwesomeIcons.female,),
+                                  iconSize: 50,
+                                  color: _iColorFemale,
+                                  onPressed: () {
+                                    setState(() {
+                                        _currentSexo = 'F';
+                                        __iconColorFemale(_currentSexo);
+                                        __iconColorMale(_currentSexo);
+                                      },
+                                    );
+                                  },
+                                  )
+                              ),
+                              ),
+                          //Male
+                           Center(
+                            widthFactor: 1,
+                            child: Ink(
+                              decoration: new BoxDecoration(
+                                //color: Color(0xFFFBE9E7), //Color(0xFFEEEEEE),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(width: 2.0, color: _iColorMale),
+                              ),
+                              child: IconButton(
+                              icon: FaIcon(FontAwesomeIcons.male),
+                              iconSize: 50,
+                              color: _iColorMale,
+                              onPressed: () {  
+                                setState(() {
+                                    _currentSexo = 'M';
+                                    __iconColorMale(_currentSexo);
+                                    __iconColorFemale(_currentSexo);
+                                  },
+                                );
+                              }, 
+                            ),
+                          ),
+                          ),
+                            ],
                           ),
                           SizedBox(height: 30.0,),
                           //Date birthDay
                           FlatButton.icon(
-                            icon: Icon(Icons.calendar_today, color: Colors.grey,),
-                            label: _currentDtNasci!=null?Text('Birth '+ _currentDtNasci.day.toString()+"/"+_currentDtNasci.month.toString()+"/"+_currentDtNasci.year.toString(), style: TextStyle(color: Colors.grey)):Text('Birth '+ snapshot.data.dtNasci.day.toString()+"/"+snapshot.data.dtNasci.month.toString()+"/"+snapshot.data.dtNasci.year.toString(), style: TextStyle(color: Colors.grey)),
+                            icon: Icon(Icons.calendar_today, color: Colors.deepOrange[200]),
+                            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0),side: BorderSide(color: Colors.grey, width: 1)),
+                            padding: EdgeInsets.symmetric(vertical:15.0, horizontal: 78.0),
+                            label: _currentDtNasci!=null?Text('Birth '+ _currentDtNasci.day.toString()+"/"+_currentDtNasci.month.toString()+"/"+_currentDtNasci.year.toString(), 
+                            style: TextStyle(color: Colors.grey,fontSize: 18.0,)):Text('Birth '+ snapshot.data.dtNasci.day.toString()+"/"+snapshot.data.dtNasci.month.toString()+"/"+snapshot.data.dtNasci.year.toString(), 
+                              style: TextStyle(color: Colors.grey, fontSize: 18.0)),
                             onPressed: () {
                               showDatePicker(
 
@@ -205,11 +271,13 @@ class SettingsState extends State<Settings> {
                               });
                             },
                           ),
-
+                          SizedBox(height: 30.0,),
                           //Button Save
                           RaisedButton(
                             color: Colors.deepOrangeAccent[200],
-                            child: Text('Save', style: TextStyle(color: Colors.white),),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 70.0),
+                            child: Text('Save', style: TextStyle(color: Colors.white, fontSize: 19.0),),
                             onPressed: () async {
                               if(_formKey.currentState.validate()){
                                 await DatabaseService(uid: user.uid).updateUserData(
@@ -220,13 +288,13 @@ class SettingsState extends State<Settings> {
                                     _currentSexo ?? snapshot.data.sexo,
                                     snapshot.data.pass,
                                     _currentTelemovel ?? snapshot.data.telemovel,
-                                    _currentDtNasci ?? snapshot.data.dtNasci,
-
+                                    _currentDtNasci ?? snapshot.data.dtNasci
                                 );
                                 Navigator.pop(context);
                               }
                             },
                           ),
+                          SizedBox(height: 30.0,),
                         ],
                       ),
                     ),

@@ -1,33 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:gym_power/camera.dart';
 import 'package:gym_power/home.dart';
-import 'package:gym_power/loading.dart';
-import 'package:gym_power/models/user.dart';
 import 'package:gym_power/service/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gym_power/sidebar.dart';
-import 'package:gym_power/workoutEasy.dart';
+import 'package:gym_power/models/user.dart';
+import 'package:gym_power/workout/countDownTimer.dart';
 import 'package:provider/provider.dart';
+import 'package:gym_power/loading.dart';
+import 'package:gym_power/workout/workoutEasy.dart';
+import 'package:gym_power/workout/workoutMedium.dart';
+import 'package:gym_power/workout/workoutHard.dart';
 
 class TabWorkout extends StatefulWidget {
-  static String tag = 'TabWorkout';
+  static String tag = "tabWorkout";
   @override
-  _TabWorkoutState createState() => _TabWorkoutState();
+  TabWorkoutState createState() => new TabWorkoutState();
 }
 
-class _TabWorkoutState extends State<TabWorkout> {
+class TabWorkoutState extends State<TabWorkout> {
+  
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: user.uid).userData,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot){
+          if(snapshot.hasData){
           UserData userData = snapshot.data;
           return  DefaultTabController(
-            length: 1, //
+            length: 3,
             child: Scaffold(
               appBar: AppBar(
-                title: Text("Workout", style: TextStyle(color: Colors.white, fontSize: 25)),
+                title: Text("Workout Plan", style: TextStyle(color: Colors.white, fontSize: 25)),
                 backgroundColor: Colors.deepOrangeAccent[200],
                 actions: <Widget>[
                   IconButton(
@@ -40,32 +44,31 @@ class _TabWorkoutState extends State<TabWorkout> {
                 ],
                 bottom: TabBar(
                   isScrollable: true,
+                  labelPadding: EdgeInsets.symmetric(horizontal: 40.0),
                   indicatorWeight: 2.0,
                   indicatorColor: Colors.white,
                   tabs: <Widget>[
-                    //Tab(child: Text("QR SCANNER", style: TextStyle(color: Colors.white, fontSize: 15),),),
                     Tab(child: Text("EASY", style: TextStyle(color: Colors.white, fontSize: 15),),),
-                    //Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                    Tab(child: Text("MEDIUM", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                    Tab(child: Text("HARD", style: TextStyle(color: Colors.white, fontSize: 15),),),
                   ],
                 ),
               ),
               drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
               body: TabBarView(
                 children: <Widget>[
-                  //Camera(),
-                   WorkoutEasy(userID: user.uid,),
-                   // Nome da função que queres que apareça
+                  WorkoutEasy(),
+                  WorkoutMedium(),
+                  WorkoutHard(),
                 ],
               ),
             ),
           );
-        }
-        else {
-          return Loading();
-        }
-
-
-      },
+          }
+          else {
+            return Loading();
+          }
+        },
     );
   }
 }
