@@ -28,10 +28,10 @@ class MyActivitiesState extends State<MyActivities>{
   final List<Card> cardList = [];
 
   
-  fillCardList(List<Map<String, String>> aulasFrequentadas) async{
+  fillCardList(data) async{
     cardList.clear();
 
-    for(int i =0; i < aulasFrequentadas.length; i++)
+    for(int i =0; i < data['aulasFrequentadas'].length; i++)
     {
       cardList.add(Card(
          semanticContainer: true,
@@ -53,20 +53,20 @@ class MyActivitiesState extends State<MyActivities>{
                   Container(
                     width: 200,
                     margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child:  Text(aulasFrequentadas[i]["nome"], style: TextStyle(color: Colors.deepOrangeAccent[200], fontSize: 20.0, fontWeight: FontWeight.w500), textAlign: TextAlign.left, ),
+                    child:  Text(data['aulasFrequentadas'][i]["nome"], style: TextStyle(color: Colors.deepOrangeAccent[200], fontSize: 20.0, fontWeight: FontWeight.w500), textAlign: TextAlign.left, ),
                   ),
 
                   Container(
                     margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                     alignment: Alignment.centerRight,
                     color: Colors.white,
-                    child: Text(aulasFrequentadas[i]["horaInicio"], style: TextStyle(color: Colors.deepOrangeAccent[200]),),
+                    child: Text(data['aulasFrequentadas'][i]["horaInicio"], style: TextStyle(color: Colors.deepOrangeAccent[200]),),
                   ),
                  Container(
                     margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                     alignment: Alignment.centerRight,
                     color: Colors.white,
-                    child: Text(aulasFrequentadas[i]["horaFim"], style: TextStyle(color: Colors.deepOrangeAccent[200]),),
+                    child: Text(data['aulasFrequentadas'][i]["horaFim"], style: TextStyle(color: Colors.deepOrangeAccent[200]),),
                   ),
                 ],
               ),
@@ -81,14 +81,14 @@ class MyActivitiesState extends State<MyActivities>{
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
-    return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: user.uid).userData,
+    return StreamBuilder(
+      stream: Firestore.instance.collection('users').document(user.uid).snapshots(),
       builder: (context, snapshot)
       {
         if(snapshot.hasData)
         {
-          UserData userData = snapshot.data;
-          fillCardList(userData.aulasFrequentadas);
+
+          fillCardList(snapshot.data);
           return new Scaffold(
           appBar: AppBar(
           title: Text("My Activities", style: TextStyle(color: Colors.white, fontSize: 25)),
@@ -126,16 +126,15 @@ class MyActivitiesState extends State<MyActivities>{
 
             )
           ),
-        drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
+          drawer: SideBar(nome: snapshot.data['nome'], numSocio: snapshot.data['numSocio'], img: snapshot.data['img'],),
 
-        body: 
-        new ListView.builder(
-          itemCount: cardList.length,
-          itemBuilder: (BuildContext ctxt, int index){
-            return cardList[index];
-          },
-            ),
-          );
+          body: ListView.builder(
+            itemCount: cardList.length,
+            itemBuilder: (BuildContext ctxt, int index){
+              return cardList[index];
+            },
+              ),
+            );
         }
         else{
           return Loading();

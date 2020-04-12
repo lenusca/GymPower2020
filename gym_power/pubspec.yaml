@@ -46,6 +46,7 @@ dependencies:
   flutter_boom_menu: ^1.0.2
   firebase_messaging: ^6.0.13
   flutter_local_notifications: ^1.4.1
+  flutter_webview_plugin: ^0.3.11
 dev_dependencies:
   flutter_test:
     sdk: flutter

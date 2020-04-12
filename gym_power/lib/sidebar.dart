@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gym_power/TabClass.dart';
 import 'package:gym_power/TabWorkout.dart';
 import 'package:gym_power/map.dart';
+import 'package:gym_power/myActivities.dart';
 import 'package:gym_power/payment.dart';
 
 import 'package:gym_power/service/auth.dart';
@@ -80,7 +81,7 @@ class SideBar extends StatelessWidget {
             //Progress
             InkWell(
               onTap: (){
-                //Navigator.of(context).pushNamed(TabActivities.tag);
+                Navigator.of(context).pushNamed(MyActivities.tag);
               },
               child: ListTile(
                 leading: Icon(FontAwesomeIcons.calendarCheck, color: Colors.black, size: 35.0,),
@@ -114,7 +115,8 @@ class SideBar extends StatelessWidget {
             //Payment
             InkWell(
               onTap: (){
-                Navigator.of(context).pushNamed(Payment.tag);
+                var route = new MaterialPageRoute(builder: (BuildContext context) => new Payment(nome: nome, img: img, numSocio: numSocio, ));
+                Navigator.of(context).push(route);
               },
               child: ListTile(
                 leading: Icon(FontAwesomeIcons.wallet, color: Colors.black,size: 35.0,),

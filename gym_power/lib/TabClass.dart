@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gym_power/home.dart';
 import 'package:gym_power/loading.dart';
 import 'package:gym_power/models/user.dart';
+import 'package:gym_power/playlist.dart';
 import 'package:gym_power/scheduleClass.dart';
 import 'package:gym_power/service/database.dart';
 import 'package:gym_power/sidebar.dart';
@@ -210,7 +211,7 @@ class TabClassState extends State<TabClass> {
 
           UserData userData = snapshot.data;
           return  DefaultTabController(
-            length: 2, //
+            length: 3, //
             child: Scaffold(
               appBar: AppBar(
                 title: Text("Class Map", style: TextStyle(color: Colors.white, fontSize: 25)),
@@ -231,10 +232,13 @@ class TabClassState extends State<TabClass> {
                   indicatorColor: Colors.white,
                   tabs: [
                     Tab(child: Container(
-                      child: Text("ClASSES", style: TextStyle(color: Colors.white, fontSize: 16),),),
+                      child: Text("CLASSES", style: TextStyle(color: Colors.white, fontSize: 16),),),
                     ),
                     Tab(child: Container(
                       child: Text("SCHEDULE", style: TextStyle(color: Colors.white, fontSize: 16),),),
+                    ),
+                    Tab(child: Container(
+                      child: Text("PLAYLIST", style: TextStyle(color: Colors.white, fontSize: 16),),),
                     ),
                   ],
                 ),
@@ -243,7 +247,8 @@ class TabClassState extends State<TabClass> {
               body: TabBarView(
                 children: [
                   AllClasses(userData.nome, userData.img, userData.numSocio,), // Nome da função que queres que apareça
-                  ScheduleClasses(),
+                  ScheduleClasses(numSocio: userData.numSocio, img: userData.img, nome: userData.nome,),
+                  Playlist(),
                 ],
               ),
             ),

@@ -2,9 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gym_power/home.dart';
+import 'package:gym_power/sidebar.dart';
 
 class Payment extends StatefulWidget {
   static String tag = "payment";
+  final String nome;
+  final String img;
+  final int numSocio;
+
+  const Payment({Key key, this.nome, this.img, this.numSocio}) : super(key: key);
   @override
   _PaymentState createState() => _PaymentState();
 }
@@ -28,6 +34,7 @@ class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SideBar(nome: widget.nome, numSocio: widget.numSocio, img: widget.img,),
       appBar: AppBar(
         title: Text("Payment", style: TextStyle(color: Colors.white, fontSize: 25)),
         backgroundColor: Colors.deepOrangeAccent[200],
@@ -105,7 +112,7 @@ class _PaymentState extends State<Payment> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text('Expires', style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w700)),
-                            _cardDate.toString().length<4?Text('00 / 00', style: TextStyle(color: Colors.grey.shade700, fontSize: 18, fontWeight: FontWeight.w700)):
+                            _cardDate.toString().length<4 || _cardDate.toString() == "null"?Text('00 / 00', style: TextStyle(color: Colors.grey.shade700, fontSize: 18, fontWeight: FontWeight.w700)):
                             Text(_cardDate.toString().trim()[0]+_cardDate.toString().trim()[1]+"/"+_cardDate.toString().trim()[2]+_cardDate.toString().trim()[3], style: TextStyle(color: Colors.grey.shade700, fontSize: 18, fontWeight: FontWeight.w700)),
                           ],
                         ),
