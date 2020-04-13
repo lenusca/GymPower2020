@@ -57,9 +57,9 @@ class TabWorkoutState extends State<TabWorkout> {
               drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
               body: TabBarView(
                 children: <Widget>[
-                  WorkoutEasy(),
-                  WorkoutMedium(),
-                  WorkoutHard(),
+                  WorkoutEasy(userID: userData.uid,),
+                  WorkoutMedium(userID: userData.uid,),
+                  WorkoutHard(userID: userData.uid,),
                 ],
               ),
             ),

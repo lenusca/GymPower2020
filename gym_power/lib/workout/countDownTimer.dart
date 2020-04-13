@@ -4,7 +4,7 @@ import 'package:gym_power/workout/paintTimer.dart';
 class CountDownTimer extends StatefulWidget {
   final String time;
   CountDownTimer({Key key, @required this.time}) : super(key: key);
-  
+
   @override
   _CountDownTimerState createState() => _CountDownTimerState();
 }
@@ -12,7 +12,7 @@ class CountDownTimer extends StatefulWidget {
 class _CountDownTimerState extends State<CountDownTimer>
     with TickerProviderStateMixin {
   AnimationController controller;
-  
+
   String get timerString {
     Duration duration = controller.duration * controller.value;
     return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
@@ -62,9 +62,9 @@ class _CountDownTimerState extends State<CountDownTimer>
                                   alignment: FractionalOffset.center,
                                   child: Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceEvenly,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
                                         "Count Down Timer",
@@ -90,21 +90,24 @@ class _CountDownTimerState extends State<CountDownTimer>
                           animation: controller,
                           builder: (context, child) {
                             return FloatingActionButton.extended(
-                                onPressed: () {
-                                  if (controller.isAnimating)
-                                    controller.stop();
-                                  else {
-                                    controller.reverse(
-                                        from: controller.value == 0.0
-                                            ? 1.0
-                                            : controller.value);
-                                  }
-                                },
-                                icon: Icon(controller.isAnimating
-                                    ? Icons.pause
-                                    : Icons.play_arrow,),
-                                label: Text(
-                                    controller.isAnimating ? "Pause" : "Play"), backgroundColor: Colors.deepOrangeAccent[200],);
+                              onPressed: () {
+                                setState(() {
+
+                                });
+                                if (controller.isAnimating)
+                                  controller.stop();
+                                else {
+                                  controller.reverse(
+                                      from: controller.value == 0.0
+                                          ? 1.0
+                                          : controller.value);
+                                }
+                              },
+                              icon: Icon(controller.isAnimating
+                                  ? Icons.pause
+                                  : Icons.play_arrow,),
+                              label: Text(
+                                  controller.isAnimating ? "Pause" : "Play"), backgroundColor: Colors.deepOrangeAccent[200],);
                           }),
                     ],
                   ),

@@ -12,8 +12,9 @@ class GymClass extends StatefulWidget {
   final String nome;
   final String img;
   final int numSocio;
+  final String userID;
 
-  GymClass({this.uid, this.nome, this.img, this.numSocio});
+  GymClass({this.uid, this.nome, this.img, this.numSocio, this.userID});
 
   @override
   _GymClassState createState() => _GymClassState();
@@ -22,6 +23,7 @@ class GymClass extends StatefulWidget {
 class _GymClassState extends State<GymClass> {
 
   @override
+
 
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -67,6 +69,13 @@ class _GymClassState extends State<GymClass> {
               else{
                 data.clear();
                 var inscritosArray = [];
+                var aulasInscritas = [];
+                var inscreverAula = {};
+
+                Firestore.instance.collection('users').document(widget.userID).get().then((doc){
+                  aulasInscritas = doc.data['aulasFrequentadas'];
+                });
+
                 for (int i = 0; i < snapshot.data['inicioHora'].length; i++) {
                   inscritosArray = snapshot.data['inscritos'];
                     data.add(MenuItem(
@@ -80,6 +89,8 @@ class _GymClassState extends State<GymClass> {
 
                         onTap: () {
                           inscritosArray[i] += 1;
+
+                          // update o número de inscritos
                           Firestore.instance.collection('ginasioAulas')
                               .document(widget.uid).updateData({
                             'inscritos': inscritosArray
@@ -87,6 +98,24 @@ class _GymClassState extends State<GymClass> {
                               .catchError((e) {
                             print(e);
                           });
+                          // update o workactivities
+                          inscreverAula = {'horaInicio': snapshot.data['inicioHora'][i], 'horaFim': snapshot.data['fimHora'][i], 'nome': snapshot.data['nome']};
+
+                          if(aulasInscritas == []){
+                            aulasInscritas = [inscreverAula];
+                          }
+                          else {
+                            aulasInscritas.add(inscreverAula);
+                          }
+
+                          Firestore.instance.collection('users')
+                              .document(widget.userID).updateData({
+                          'aulasFrequentadas': aulasInscritas
+                          })
+                              .catchError((e) {
+                          print(e);
+                          });
+
                         }
                     ));
 

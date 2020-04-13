@@ -19,35 +19,14 @@ class WorkoutHard extends StatefulWidget {
 
 class _WorkoutHardState extends State<WorkoutHard> {
 
-  /*updateData(selectedDoc, newValues) {
-    Firestore.instance
-        .collection('Exercicio')
-        .document(selectedDoc)
-        .updateData(newValues);
-  }*/
-
-  /*void reset() async{
-    await Firestore.instance
-        .collection('Exercicio').snapshots()
-        .forEach((snapshot) async {
-      List<DocumentSnapshot> documents = snapshot.documents;
-      for (var document in documents) {
-        await document.data.update(
-          'check',
-          (val) {
-            val = "n";
-            return val;
-          },
-        );
-        print(document.data['check']);
-      }
-    });
-       
-  }*/
-
   @override
   List<Container> workout = [];
   getData(doc) {
+    var workoutFeito = [];
+    var updateWorkout = {};
+    Firestore.instance.collection('users').document(widget.userID).get().then((doc){
+      workoutFeito = doc.data['workout'];
+    });
    for(int i = 0; i<doc.length; i++){
        workout.add(Container(
         height: 200,
@@ -113,25 +92,61 @@ class _WorkoutHardState extends State<WorkoutHard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      doc[i].data['tempo']==null?Container():IconButton(
-                      padding: EdgeInsets.only(right:30),
-                      icon: FaIcon(FontAwesomeIcons.stopwatch, 
-                        color: Colors.grey[200], 
-                        size: 30,),
-                      onPressed: (){
-                        Navigator.push(context, 
-                        MaterialPageRoute(builder: (context)=>CountDownTimer(time:doc[i].data['tempo'].toString())));
-                      },),
-                      doc[i].data['qrCode']==null?Container():IconButton(
-                      padding: EdgeInsets.only(left:50),
-                      icon: FaIcon(FontAwesomeIcons.camera, 
-                        color: Colors.grey[200], 
-                        size: 30,),
-                      onPressed: (){
-                        Navigator.of(context).push( 
-                        MaterialPageRoute(builder: (context) => Camera()));
-                      },
+                      doc[i].data['tempo']==null?Container():Container(
+                        child: IconButton(
+                          icon: FaIcon(FontAwesomeIcons.stopwatch,
+                            color: Colors.grey[200],
+                            size: 30,),
+                          enableFeedback: true,
+
+                          onPressed: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context)=>CountDownTimer(time:doc[i].data['tempo'].toString())));
+                          },),
+                        //color: Colors.black,
+                      ),
+                      Container(
+
+                        margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        //color: Colors.brown,
+                        child: IconButton(
+                          onPressed: (){
+                            updateWorkout = {"intensity": doc[i].data['velocidade'] == null? doc[i].data['peso']+"kg":doc[i].data['velocidade']+"km/h", "nSerie": doc[i].data['nSerie'], "nome": doc[i].data['nome']};
+                            if(workoutFeito == []){
+                              workoutFeito = [updateWorkout];
+                            }
+                            else{
+                              workoutFeito.add(updateWorkout);
+                            }
+
+                            Firestore.instance.collection('users')
+                                .document(widget.userID).updateData({
+                              'workout': workoutFeito
+                            })
+                                .catchError((e) {
+                              print(e);
+                            });
+                          },
+                          icon: FaIcon(FontAwesomeIcons.solidCheckCircle, color: Colors.grey[200],
+                            size: 30,
+                          ),
+                          enableFeedback: true,
+
                         ),
+                      ),
+                      doc[i].data['qrCode']==null?Container():Container(
+                        child: IconButton(
+                          icon: FaIcon(FontAwesomeIcons.camera,
+                            color: Colors.grey[200],
+                            size: 30,),
+                          onPressed: (){
+                            print("AQUII");
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => Camera()));
+                          },
+                        ),
+                        //color: Colors.black,
+                      ),
                     ],),
                 ],
                 ),

@@ -48,7 +48,7 @@ class TabClassState extends State<TabClass> {
     });
   }
 
-   bottomClass (documents, String nome, String img, int numSocio) async{
+   bottomClass (documents, String nome, String img, int numSocio, String userID) async{
     buttonClass.clear();
 
     // lotação total
@@ -166,7 +166,7 @@ class TabClassState extends State<TabClass> {
                         icon: Icon(FontAwesomeIcons.infoCircle, size: 20, color: Colors.white,),
                         splashColor: Colors.transparent,
                         onPressed: (){
-                          var route = new MaterialPageRoute(builder: (BuildContext context) => new GymClass( uid: documents[i].documentID,  nome: nome, img: img, numSocio: numSocio, ));
+                          var route = new MaterialPageRoute(builder: (BuildContext context) => new GymClass( uid: documents[i].documentID,  nome: nome, img: img, numSocio: numSocio, userID: userID, ));
                           Navigator.of(context).push(route);
                         },
                       )
@@ -181,7 +181,7 @@ class TabClassState extends State<TabClass> {
     }
   }
 
-  AllClasses(String nome, String img, int numSocio){
+  AllClasses(String nome, String img, int numSocio, String userID){
     return StreamBuilder(
       stream: Firestore.instance.collection('ginasioAulas').snapshots(),
       builder: (context, snapshot){
@@ -190,7 +190,7 @@ class TabClassState extends State<TabClass> {
           return Loading();
         }
         else{
-          bottomClass(snapshot.data.documents, nome, img, numSocio);
+          bottomClass(snapshot.data.documents, nome, img, numSocio, userID);
           return ListView.builder(
             itemCount: buttonClass.length,
             itemBuilder: (BuildContext context, int index){
@@ -245,7 +245,7 @@ class TabClassState extends State<TabClass> {
               drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
               body: TabBarView(
                 children: [
-                  AllClasses(userData.nome, userData.img, userData.numSocio,), // Nome da função que queres que apareça
+                  AllClasses(userData.nome, userData.img, userData.numSocio, userData.uid), // Nome da função que queres que apareça
                   ScheduleClasses(numSocio: userData.numSocio, img: userData.img, nome: userData.nome,),
                   Playlist(),
                 ],

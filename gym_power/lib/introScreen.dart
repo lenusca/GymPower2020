@@ -15,6 +15,8 @@ import 'package:gym_power/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:gym_power/home.dart';
 
+import 'loading.dart';
+
 class IntroScreen extends StatefulWidget {
   static String tag = "introscreen";
   final userID;
@@ -108,13 +110,14 @@ class _IntroScreenState extends State<IntroScreen> {
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
-        if(snapshot.hasData){
+        if(!snapshot.hasData){
+          Loading();
+        }
+        else{
           UserData userData = snapshot.data; 
           return Form(
             key: _formKey,
-            child:
-          IntroductionScreen(
-            
+            child: IntroductionScreen(
             pages: [
         //Page welcome  
         PageViewModel(
