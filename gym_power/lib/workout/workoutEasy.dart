@@ -22,8 +22,10 @@ class WorkoutEasy extends StatefulWidget {
 class _WorkoutEasyState extends State<WorkoutEasy> {
 
   @override
+  var icons;
   List<Container> workout = [];
   getData(doc) {
+
     var workoutFeito = [];
     var updateWorkout = {};
 
@@ -114,6 +116,10 @@ class _WorkoutEasyState extends State<WorkoutEasy> {
                             margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                             //color: Colors.brown,
                             child: IconButton(
+                              enableFeedback: true,
+                              hoverColor: Colors.deepOrangeAccent[200],
+                              splashColor: Colors.deepOrangeAccent[200],
+                              disabledColor: Colors.deepOrangeAccent[200],
                               onPressed: (){
                                 updateWorkout = {"intensity": doc[i].data['velocidade'] == null? doc[i].data['peso']+"kg":doc[i].data['velocidade']+"km/h", "nSerie": doc[i].data['nSerie'], "nome": doc[i].data['nome']};
                                 if(workoutFeito == []){
@@ -130,16 +136,27 @@ class _WorkoutEasyState extends State<WorkoutEasy> {
                                     .catchError((e) {
                                   print(e);
                                 });
+
+                                Firestore.instance.collection('Exercicio').document(doc[i].documentID).updateData({
+                                  'icon': true
+                                })
+                                    .catchError((e) {
+                                  print(e);
+                                });
+                                print(doc[i].data['icon']);
                               },
-                              icon: FaIcon(FontAwesomeIcons.solidCheckCircle, color: Colors.grey[200],
+                              icon: doc[i].data['icon']==false ||doc[i].data['icon']==null?FaIcon(FontAwesomeIcons.solidCheckCircle, color: Colors.grey[200],
+                                size: 30,
+                              ):FaIcon(FontAwesomeIcons.solidCheckCircle, color: Colors.green[200],
                                 size: 30,
                               ),
-                              enableFeedback: true,
+
 
                             ),
                           ),
                           doc[i].data['qrCode']==null?Container():Container(
                             child: IconButton(
+
                               icon: FaIcon(FontAwesomeIcons.camera,
                                 color: Colors.grey[200],
                                 size: 30,),
@@ -179,6 +196,7 @@ class _WorkoutEasyState extends State<WorkoutEasy> {
                 //print(workout.length);
                 //print(snapshot.data.documents.length);
                 //print(snapshot.data.documents[0].data['nome']);
+                icons = List.filled(snapshot.data.documents.length, false);
                 getData(snapshot.data.documents);
                 return ListView.builder(
                   itemCount: snapshot.data.documents.length,

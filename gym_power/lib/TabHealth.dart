@@ -24,49 +24,47 @@ class TabHealthState extends State<TabHealth> {
         stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot){
           if(snapshot.hasData){
-          UserData userData = snapshot.data;
-          return  DefaultTabController(
-            length: 3, //
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text("Health", style: TextStyle(color: Colors.white, fontSize: 25)),
-                backgroundColor: Colors.deepOrangeAccent[200],
-                actions: <Widget>[
-                  IconButton(
-                      icon: Icon(Icons.home),
-                      color: Colors.white,
-                      onPressed:(){
-                        Navigator.of(context).pushNamed(Home.tag);
-                      }
-                  )
-                ],
-                bottom: TabBar(
-                  isScrollable: true,
-                  indicatorWeight: 2.0,
-                  indicatorColor: Colors.white,
-                  tabs: <Widget>[
-                    Tab(child: Text("SENSORS", style: TextStyle(color: Colors.white, fontSize: 15),),),
-                    Tab(child: Text("TABLE", style: TextStyle(color: Colors.white, fontSize: 15),),),
-                    Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 15),),),
+            UserData userData = snapshot.data;
+            return  DefaultTabController(
+              length: 3, //
+              child: Scaffold(
+                appBar: AppBar(
+                  title: Text("Health", style: TextStyle(color: Colors.white, fontSize: 25)),
+                  backgroundColor: Colors.deepOrangeAccent[200],
+                  actions: <Widget>[
+                    IconButton(
+                        icon: Icon(Icons.home),
+                        color: Colors.white,
+                        onPressed:(){
+                          Navigator.of(context).pushNamed(Home.tag);
+                        }
+                    )
+                  ],
+                  bottom: TabBar(
+                    isScrollable: true,
+                    indicatorWeight: 2.0,
+                    indicatorColor: Colors.white,
+                    tabs: <Widget>[
+                      Tab(child: Text("SENSORS", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                      Tab(child: Text("TABLE", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                      Tab(child: Text("GRAPH", style: TextStyle(color: Colors.white, fontSize: 15),),),
+                    ],
+                  ),
+                ),
+                drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
+                body: TabBarView(
+                  children: <Widget>[
+                    SensorsData(),
+                    HealthTable(), // Nome da função que queres que apareça
+                    HealthGraph(), // Nome da função que queres que apareça
                   ],
                 ),
               ),
-              drawer: SideBar(nome: userData.nome, numSocio: userData.numSocio, img: userData.img,),
-              body: TabBarView(
-                children: <Widget>[
-                  SensorsData(),
-                  HealthTable(), // Nome da função que queres que apareça
-                  HealthGraph(), // Nome da função que queres que apareça
-                ],
-              ),
-            ),
-          );
+            );
           }
           else {
             return Loading();
           }
-
-
         },
     );
 

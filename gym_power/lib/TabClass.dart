@@ -105,6 +105,14 @@ class TabClassState extends State<TabClass> {
                       clipBehavior: Clip.hardEdge,
                       onPressed: () {
                         schedule.clear();
+                        var aulasInscritas = [];
+                        var inscreverAula = {};
+                        print("AQUI"+userID);
+                        Firestore.instance.collection('users').document(userID).get().then((doc){
+                          aulasInscritas = doc.data['aulasFrequentadas'];
+                        });
+
+                        print(aulasInscritas);
                         for(int j=0; j<documents[i].data['diaSemana'].length; j++){
                             schedule.add(
                               SimpleDialogOption(
@@ -123,11 +131,30 @@ class TabClassState extends State<TabClass> {
                                 onPressed: () {
 
                                   var inscritosArray = [];
+
+                                  // update o número de inscritos
                                   inscritosArray = documents[i].data['inscritos'];
                                   inscritosArray[j] += 1;
                                   Firestore.instance.collection('ginasioAulas')
                                       .document(documents[i].documentID).updateData({
                                     'inscritos': inscritosArray
+                                  })
+                                      .catchError((e) {
+                                    print(e);
+                                  });
+                                  // update o workactivities
+                                  inscreverAula = {'horaInicio': documents[i].data['inicioHora'][j], 'horaFim': documents[i].data['fimHora'][j], 'nome': documents[i].data['nome']};
+
+                                  if(aulasInscritas == []){
+                                    aulasInscritas = [inscreverAula];
+                                  }
+                                  else {
+                                    aulasInscritas.add(inscreverAula);
+                                  }
+
+                                  Firestore.instance.collection('users')
+                                      .document(userID).updateData({
+                                    'aulasFrequentadas': aulasInscritas
                                   })
                                       .catchError((e) {
                                     print(e);

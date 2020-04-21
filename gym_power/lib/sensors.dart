@@ -18,14 +18,15 @@ class SensorsData extends StatefulWidget {
 class _SensorsDataState extends State<SensorsData> {
   String passos = "";
   String _km = "Unknown";
-  String _calories = "Unknow";
-  String _stepCountValues = "Unknow";
+  String _calories = "Unknown";
+  String _stepCountValues = "Unknown";
   StreamSubscription<int> _subscription;
   double _cntSteps; //step count
   double _cntKM; // km count
   double _convert;
   int _heartRate;
 
+  // Batimento Cardiaco
   void HeartRate() async{
     Stream<PulseEvent> stream = await Pulse.subscribe();
     stream.listen((PulseEvent event) {
@@ -55,7 +56,6 @@ class _SensorsDataState extends State<SensorsData> {
   void _onData(int stepCount) async {
       setState(() {
         _stepCountValues = "$stepCount";
-
       });
 
       var distance = stepCount;
@@ -81,7 +81,7 @@ class _SensorsDataState extends State<SensorsData> {
     });
   }
 
-  // calculate distance
+  // Distância em Km
   void getDistanceRun(double _cntSteps){
     var distance = ((_cntSteps * 78)/100000);
     distance = num.parse(distance.toStringAsFixed(2));
@@ -96,7 +96,7 @@ class _SensorsDataState extends State<SensorsData> {
     });
   }
 
-  // calculate calories burned in km using number of steps
+  // Calorias gastas
   void getCalories(){
     setState(() {
       var calories = _cntKM;

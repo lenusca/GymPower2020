@@ -64,10 +64,6 @@ class _CameraState extends State<Camera> {
 
               result.toString().isEmpty?Text(""):Container(
                 padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
-
-
-
-
                     child:YoutubePlayer(
 
                       controller: YoutubePlayerController(
